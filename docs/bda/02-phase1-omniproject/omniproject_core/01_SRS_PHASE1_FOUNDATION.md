@@ -86,7 +86,7 @@ Dựa trên kiến trúc RBAC, hệ thống phân loại người dùng thành 4
 | ID | Requirement Description | Reference Standard |
 |---|---|---|
 | **NFR-SEC-01** | Mã hóa Dữ liệu (Encryption) | Dữ liệu truyền tải qua mạng bắt buộc dùng HTTPS (TLS 1.2+). Mật khẩu lưu trữ dùng thuật toán `bcrypt` (work factor 10+) hoặc `Argon2id`. |
-| **NFR-SEC-02** | Chống Brute-force & Rate Limiting | Khóa IP & Tài khoản 30 phút sau 5 lần nhập sai mật khẩu liên tiếp. Rate limit 100 req/min/IP cho API chung, 10 req/min/IP cho API Authentication. (OWASP Broken Auth) |
+| **NFR-SEC-02** | Chống Brute-force & Rate Limiting | Khóa IP & Tài khoản 5 phút sau 5 lần nhập sai mật khẩu liên tiếp. Rate limit 100 req/min/IP cho API chung, 10 req/min/IP cho API Authentication. (OWASP Broken Auth) |
 | **NFR-SEC-03** | Chống Injection & XSS | Mọi input phải được validate/sanitize ở Server-side. Dữ liệu xuất ra UI phải qua bộ lọc DOMPurify hoặc cơ chế Auto-escaping của Framework (React/Vue). (OWASP Injection & XSS) |
 | **NFR-SEC-04** | Kiểm soát truy cập Multi-tenant | Mọi truy vấn DB phải bao gồm điều kiện `workspace_id = context.current_workspace`. Phân quyền RBAC qua Middleware trước khi vào Controller. (OWASP BOLA/IDOR) |
 

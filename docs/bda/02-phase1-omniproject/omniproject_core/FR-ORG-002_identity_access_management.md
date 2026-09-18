@@ -13,7 +13,7 @@
 | **FR-ORG-002.2** | **Quản lý Directory (Member List):** Màn hình hiển thị toàn bộ thành viên trong Workspace. Cho phép Admin tìm kiếm, lọc, thay đổi Role, hoặc vô hiệu hóa (Deactivate) tài khoản. | Keyword, Thao tác chỉnh sửa | Cập nhật DB | BL-ORG-002.2 | Must-have |
 | **FR-ORG-002.3** | **Quản lý Nhóm (User Groups):** Cho phép tạo các Nhóm người dùng (Ví dụ: "Backend Team", "Designers"). Nhóm này có thể được dùng để `assignee` hoặc `@mention` hàng loạt. | Tên nhóm, Danh sách thành viên | Group được tạo | None | Should-have |
 | **FR-ORG-002.4** | **Cấu hình SSO (SAML/OIDC):** Màn hình cho phép Admin điền các thông tin IdP (Identity Provider) như ACS URL, Entity ID, x509 Certificate để bật SSO cho Workspace. | Thông tin IdP | Kích hoạt luồng đăng nhập SSO | BL-ORG-002.3 | Should-have |
-| **FR-ORG-002.5** | **Khóa tài khoản tự động (Auto-Lock):** Tự động khóa tài khoản hoặc buộc đổi mật khẩu nếu phát hiện đăng nhập sai quá 5 lần (Brute-force protection). | Hành động login sai | Khóa user 30 phút | BL-ORG-002.4 | Must-have |
+| **FR-ORG-002.5** | **Khóa tài khoản tự động (Auto-Lock):** Tự động khóa tài khoản hoặc buộc đổi mật khẩu nếu phát hiện đăng nhập sai quá 5 lần (Brute-force protection). | Hành động login sai | Khóa user 5 phút | BL-ORG-002.4 | Must-have |
 
 ---
 
@@ -24,7 +24,7 @@
   * Khi nhân viên nghỉ việc, Admin sử dụng chức năng **Deactivate (Vô hiệu hóa)** thay vì Delete.
   * *Lý do:* Giữ lại toàn bộ lịch sử công việc (Audit Log, Time Log) của nhân viên đó. User bị Deactivate không thể đăng nhập và không bị tính phí (không tính vào số lượng seat của gói cước).
 * **BL-ORG-002.3 (SSO Enforcement):** Nếu Workspace bật tính năng "Force SSO", mọi user có email domain của công ty đó (VD: `@vng.com.vn`) bắt buộc phải đăng nhập qua nút SSO. Đăng nhập bằng Password truyền thống sẽ bị chặn.
-* **BL-ORG-002.4 (Security Lock):** Nếu tài khoản chưa cấu hình SSO mà sử dụng password, sau 5 lần nhập sai liên tiếp, hệ thống khóa IP và Account trong 30 phút. Có gửi email cảnh báo "Phát hiện đăng nhập bất thường" cho user.
+* **BL-ORG-002.4 (Security Lock):** Nếu tài khoản chưa cấu hình SSO mà sử dụng password, sau 5 lần nhập sai liên tiếp, hệ thống khóa IP và Account trong 5 phút. Có gửi email cảnh báo "Phát hiện đăng nhập bất thường" cho user.
 
 ---
 
@@ -47,6 +47,18 @@
 | `user_id` | UUID | Yes | Foreign Key |
 | `role` | Enum | Yes | `ADMIN`, `MEMBER`, `GUEST` (Cấp Workspace) |
 | `status` | Enum | Yes | `INVITED`, `ACTIVE`, `DEACTIVATED` |
+
+### Entity: Invitation
+| Field | Data Type | Required | Constraints |
+|---|---|---|---|
+| `id` | UUID | Yes | Primary Key |
+| `workspace_id` | UUID | Yes | Foreign Key |
+| `email` | String | Yes | Email người được mời |
+| `role` | Enum | Yes | `ADMIN`, `MEMBER`, `GUEST` |
+| `token` | String | Yes | JWT Invite Token (Unique) |
+| `status` | Enum | Yes | `PENDING`, `ACCEPTED`, `EXPIRED`, `REVOKED` |
+| `invited_by_user_id` | UUID | Yes | Foreign Key |
+| `expires_at` | DateTime | Yes | NOW() + 48 hours |
 
 ### Entity: Workspace_SSO_Config
 | Field | Data Type | Required | Constraints |
@@ -74,25 +86,31 @@ sequenceDiagram
     actor NewUser as Người được mời
 
     Admin->>Client: Nhập email "nv_moi@congty.com", chọn Role "Member"
-    Client->>API: POST /workspaces/invites
-    API->>DB: Kiểm tra Email đã là member chưa?
-    DB-->>API: Chưa tồn tại
+    Client->>API: POST /workspaces/:id/invites (email, role)
+    API->>DB: 1. Kiểm tra Capacity Limit gói cước & Email đã là member chưa?
+    DB-->>API: Chưa tồn tại & Đủ quota thành viên
     API->>API: Sinh JWT Invite Token (hạn 48h)
-    API->>DB: Tạo Workspace_Member (status: INVITED)
+    API->>DB: 2. Lưu lời mời vào bảng Invitation (status: PENDING, token, role, expires_at: 48h)
     DB-->>API: OK
-    API->>Email: Gửi email chứa link: /join?token=JWT
-    API-->>Client: HTTP 200 (Đã gửi lời mời)
+    API->>Email: 3. Gửi email chứa link: /join?token=JWT
+    API-->>Client: HTTP 201 Created (Đã gửi lời mời)
     
     Note over NewUser: Nhân viên check email
     NewUser->>Client: Click link trong email
     Client->>API: GET /auth/verify-invite?token=JWT
-    API->>DB: Validate Token & Hạn sử dụng
-    DB-->>API: Hợp lệ
-    API-->>Client: HTTP 200 (Redirect sang trang Đăng ký/Tạo mật khẩu)
-    NewUser->>Client: Nhập Tên & Mật khẩu
-    Client->>API: POST /auth/accept-invite
-    API->>DB: Update Workspace_Member (status: ACTIVE)
-    API-->>Client: HTTP 200 (Login thành công)
+    API->>DB: Validate Token trong bảng Invitation & kiểm tra expires_at
+    DB-->>API: Hợp lệ (Status PENDING & chưa hết hạn)
+    API-->>Client: HTTP 200 (Trả về email, workspaceName để render form hoàn tất)
+    
+    NewUser->>Client: Nhập Tên & Mật khẩu (nếu là user mới)
+    Client->>API: POST /auth/accept-invite (token, fullName, password)
+    Note over API,DB: Bắt đầu Database Transaction (Unit of Work)
+    API->>DB: 1. Tạo User mới (hoặc xác thực User hiện có nếu đã có tài khoản)
+    API->>DB: 2. Tạo Workspace_Member (status: ACTIVE, role)
+    API->>DB: 3. Cập nhật Invitation (status: ACCEPTED)
+    Note over API,DB: Commit Transaction
+    API->>API: Sinh Access Token (JWT Session)
+    API-->>Client: HTTP 200 (Login thành công kèm JWT Token & Profile)
 ```
 
 ### 4.2. Luồng Cưỡng chế SSO (Force SSO) & Khóa tự động (Auto-Lock)
@@ -117,13 +135,13 @@ sequenceDiagram
         DB-->>API: Không bắt buộc SSO
         API->>DB: Kiểm tra trạng thái User (is_locked?)
         alt is_locked == true (Đang bị khóa)
-            API-->>Client: HTTP 403 (Tài khoản bị khóa tạm thời 30 phút)
+            API-->>Client: HTTP 403 (Tài khoản bị khóa tạm thời 5 phút)
         else Tài khoản bình thường
             API->>API: Verify Password Hash
             alt Sai Password
                 API->>DB: Increment failed_attempts + 1
                 alt failed_attempts >= 5
-                    API->>DB: Set is_locked = true, lock_until = now + 30m
+                    API->>DB: Set is_locked = true, lock_until = now + 5m
                     API-->>Client: HTTP 403 (Nhập sai 5 lần, khóa tài khoản)
                 else Dưới 5 lần
                     API-->>Client: HTTP 401 Unauthorized (Sai mật khẩu)
