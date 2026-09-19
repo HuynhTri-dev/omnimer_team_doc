@@ -45,7 +45,7 @@
 | `id` | UUID | Yes | Primary Key |
 | `workspace_id` | UUID | Yes | Foreign Key |
 | `user_id` | UUID | Yes | Foreign Key |
-| `role` | Enum | Yes | `ADMIN`, `MEMBER`, `GUEST` (Cấp Workspace) |
+| `role` | Enum | Yes | `ADMIN`, `PM`, `MEMBER`, `GUEST` (Cấp Workspace) |
 | `status` | Enum | Yes | `INVITED`, `ACTIVE`, `DEACTIVATED` |
 
 ### Entity: Invitation
@@ -54,7 +54,7 @@
 | `id` | UUID | Yes | Primary Key |
 | `workspace_id` | UUID | Yes | Foreign Key |
 | `email` | String | Yes | Email người được mời |
-| `role` | Enum | Yes | `ADMIN`, `MEMBER`, `GUEST` |
+| `role` | Enum | Yes | `ADMIN`, `PM`, `MEMBER`, `GUEST` |
 | `token` | String | Yes | JWT Invite Token (Unique) |
 | `status` | Enum | Yes | `PENDING`, `ACCEPTED`, `EXPIRED`, `REVOKED` |
 | `invited_by_user_id` | UUID | Yes | Foreign Key |
@@ -68,7 +68,7 @@
 | `idp_entity_id`| String | Yes | |
 | `idp_acs_url` | String | Yes | |
 | `x509_cert` | Text | Yes | Chứng chỉ công khai từ IdP |
-| `force_sso` | Boolean | Yes | Ép buộc đăng nhập qua SSO |
+| `force_sso` | Boolean | Yes | Ép buộc đăng nhập qua SSO (Backend alias: `is_enforced`) |
 
 ---
 
