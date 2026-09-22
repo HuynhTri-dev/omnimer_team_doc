@@ -11,7 +11,7 @@
 |---|---|---|---|---|---|
 | **FR-ORG-001.1** | **Tạo Organization & Workspace:** Khi user đăng ký mới, hệ thống tự động tạo 1 Organization và 1 Default Workspace. User trở thành Org Owner. | Thông tin công ty, Tên Workspace | Record trong DB | BL-ORG-001.1 | Must-have |
 | **FR-ORG-001.2** | **Quản lý Cấu hình Workspace:** Cho phép Workspace Admin chỉnh sửa tên, logo, timezone mặc định, và format ngày/giờ cho toàn bộ Workspace. | Form Settings | Cập nhật cấu hình | None | Must-have |
-| **FR-ORG-001.3** | **Subscription & Billing:** Quản lý gói cước (Free, Pro, Enterprise). Hiển thị số lượng seat (tài khoản) đang sử dụng, chu kỳ thanh toán, và xuất hóa đơn VAT. | Nâng cấp gói, Thêm thẻ tín dụng | Gọi API Stripe/Paddle | BL-ORG-001.2 | Must-have |
+| **FR-ORG-001.3** | **Subscription & Billing:** Quản lý gói cước (Free, Pro, Enterprise). Hiển thị số lượng seat (tài khoản) đang sử dụng, chu kỳ thanh toán, và xuất hóa đơn VAT. | Nâng cấp gói, Thêm thẻ tín dụng | Gọi API Stripe | BL-ORG-001.2 | Must-have |
 | **FR-ORG-001.4** | **Multi-Workspace Switcher:** Cho phép 1 User có thể tham gia nhiều Workspace khác nhau và dễ dàng chuyển đổi qua lại từ Menu góc trái màn hình. | Click chọn Workspace khác | Reload data theo context mới | BL-ORG-001.3 | Must-have |
 | **FR-ORG-001.5** | **Audit Log (Cấp độ Org):** Lưu vết toàn bộ các hành động mang tính quản trị (Tạo project mới, xóa project, đổi gói cước, xuất dữ liệu hàng loạt). | Trigger từ backend | Danh sách log immutable | BL-ORG-001.4 | Should-have |
 
