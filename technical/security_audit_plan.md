@@ -149,7 +149,7 @@ flowchart TD
 ### Giai đoạn 1: Xác định phạm vi & Mô hình hóa hiểm họa (Scoping & STRIDE Modeling)
 - **Mục tiêu:** Định vị toàn bộ ranh giới tin cậy (Trust Boundaries), luồng dữ liệu (Data Flows) và các tài nguyên trọng yếu của OmniProject.
 - **Công việc cụ thể:**
-  1. Phỏng vấn và rà soát tài liệu kiến trúc (`c4_model_phase1.md`, `erd_phase1_foundation.md`, `tech_stack.md`).
+  1. Phỏng vấn và rà soát tài liệu kiến trúc (`c4_model_phase1.md`, `erd_project_core.md`, `tech_stack.md`).
   2. Lập bảng phân tích STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) cho 4 luồng dữ liệu cốt lõi:
      - Luồng Xác thực người dùng (Auth & SSO Flow)
      - Luồng Phân quyền Workspace & Multi-tenancy
