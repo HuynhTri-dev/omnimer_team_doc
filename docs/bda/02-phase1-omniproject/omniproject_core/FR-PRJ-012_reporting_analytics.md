@@ -11,7 +11,7 @@
 |---|---|---|---|---|---|
 | **FR-PRJ-012.1** | **Burndown Chart:** Hiển thị đồ thị số lượng Story Points (hoặc số Task) còn lại theo ngày trong Sprint. So sánh đường thực tế (Actual) với đường lý tưởng (Ideal). | Sprint đang ACTIVE | Biểu đồ đường 2 series | BL-PRJ-012.1 | Must-have |
 | **FR-PRJ-012.2** | **Velocity Chart:** Biểu đồ cột hiển thị tổng Story Points hoàn thành (Done) qua mỗi Sprint. Tính Velocity trung bình trong 3 Sprint gần nhất (rolling average). | Danh sách Sprint CLOSED | Bar chart + Rolling Average line | BL-PRJ-012.2 | Must-have |
-| **FR-PRJ-012.3** | **Cycle Time Distribution:** Biểu đồ phân phối (histogram hoặc scatter) thời gian từ khi Task vào `IN_PROGRESS` đến khi `DONE`. | Task logs trong khoảng thời gian | Histogram + Percentile (p50, p75, p95) | BL-PRJ-012.3 | Should-have |
+| **FR-PRJ-012.3** | **Lead & Cycle Time Distribution:** Biểu đồ phân phối (histogram hoặc scatter) thời gian của 3 chỉ số quản trị tinh gọn (Lean Management): System Lead Time, Delivery Lead Time, và Cycle Time. | Task logs trong khoảng thời gian | Histogram + Percentile (p50, p75, p95) | BL-PRJ-012.3 | Should-have |
 | **FR-PRJ-012.4** | **Throughput Chart:** Biểu đồ số lượng Task hoàn thành mỗi ngày/tuần trong một khoảng thời gian. | Khoảng thời gian chọn | Bar/Line chart | None | Should-have |
 | **FR-PRJ-012.5** | **Export Báo cáo:** Xuất dữ liệu báo cáo (bảng Task, log thời gian, burndown data) sang định dạng CSV hoặc PDF. | Chọn loại báo cáo + khoảng thời gian | File download | BL-PRJ-012.4 | Should-have |
 
@@ -28,8 +28,10 @@
   ```
   Chỉ tính Tasks thuộc Sprint tại thời điểm Sprint kết thúc (không tính Tasks được chuyển vào sau khi đóng).
 
-* **BL-PRJ-012.3 (Cycle Time Calculation):**
+* **BL-PRJ-012.3 (Lead & Cycle Time Calculation):**
   ```
+  System_Lead_Time = Timestamp(Task.status → DONE) - Timestamp(Task.created_at)
+  Delivery_Lead_Time = Timestamp(Task.status → DONE) - Timestamp(Task.status → TODO) [Điểm cam kết]
   Cycle_Time = Timestamp(Task.status → DONE) - Timestamp(Task.status → IN_PROGRESS)
   ```
   Tính bằng giờ làm việc (business hours), không tính cuối tuần và ngày nghỉ lễ.
@@ -49,10 +51,12 @@
 | `remaining_points` | Integer | Yes | Tổng SP chưa Done |
 | `completed_points` | Integer | Yes | Tổng SP đã Done trong ngày |
 
-### Entity: Task (Bổ sung)
+### Entity: Task (Bổ sung cho Analytics)
 | Field | Data Type | Required | Constraints |
 |---|---|---|---|
 | `story_points` | Integer | No | Ước tính effort theo Fibonacci (1,2,3,5,8,13) |
+| `created_at` | Timestamp | Yes | Lúc sinh ra Task ở trạng thái OPEN (Backlog) |
+| `committed_at` | Timestamp | No | Lúc Task chuyển sang TODO (Điểm cam kết) |
 | `started_at` | Timestamp | No | Lúc Task chuyển sang IN_PROGRESS lần đầu |
 | `completed_at` | Timestamp | No | Lúc Task chuyển sang DONE |
 
