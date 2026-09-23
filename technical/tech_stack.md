@@ -13,12 +13,12 @@
 
 | Layer | Lựa chọn | Phiên bản | Lý do |
 | :--- | :--- | :--- | :--- |
-| **Core Framework** | **Next.js** (App Router) | 14+ | File-system routing chuẩn hóa, tránh lỗi cấu hình `react-router`. Server Components giúp ẩn config nhạy cảm an toàn. Ổn định cao, duy trì bởi Vercel. |
-| **Language** | **TypeScript** | 5+ | Type-safety end-to-end, chia sẻ interface giữa Frontend và Backend. |
-| **Styling** | **Tailwind CSS** | 3+ | Utility-first, dễ custom theme/dark mode, không cần thêm layer UI library ở Phase 1. |
-| **Server State** | **TanStack Query (React Query)** | 5+ | Quản lý caching, refetching và **Optimistic Updates** — cần thiết cho OCC (HTTP 412 rollback). |
-| **Client State** | **Zustand** | 4+ | Quản lý UI state nhẹ nhàng (ví dụ: trạng thái modal, sidebar, filter đang chọn). |
-| **Drag & Drop** | **dnd-kit** | 6+ | Hiện đại, nhẹ hơn `react-beautiful-dnd` (đã ngừng maintain). Hỗ trợ Kanban board, sortable list. |
+| **Core Framework** | **Next.js** (App Router) | **14.2.30+** | File-system routing chuẩn hóa, tránh lỗi cấu hình `react-router`. Server Components giúp ẩn config nhạy cảm an toàn. Phiên bản 14.2.30+ vá lỗi hở source code (CVE-2025-48068) và lỗi bypass middleware (CVE-2025-29927). |
+| **Language** | **TypeScript** | **5.5+** | Type-safety end-to-end, chia sẻ interface giữa Frontend và Backend. |
+| **Styling** | **Tailwind CSS** | **3.4+** | Utility-first, dễ custom theme/dark mode, không cần thêm layer UI library ở Phase 1. An toàn, không có direct CVE. |
+| **Server State** | **TanStack Query (React Query)** | **5.18.0+** | Quản lý caching, refetching và **Optimistic Updates**. Phiên bản >=5.18.0 vá lỗi XSS trong gói experimental (CVE-2024-24558) và tránh các bản bị supply-chain attack tháng 5/2026. |
+| **Client State** | **Zustand** | **4.5.0+** | Quản lý UI state nhẹ nhàng. An toàn, chú ý tránh cài nhầm package mạo danh (typosquatting). |
+| **Drag & Drop** | **dnd-kit** | **6.1.0+** | Hiện đại, nhẹ, an toàn tuyệt đối (không có direct CVE). Hỗ trợ Kanban board, sortable list. |
 | **WebSocket Client** | **native `WebSocket` API** | — | Browser hỗ trợ sẵn, không cần dependency. Dùng custom hook để wrap reconnection logic (Exponential Backoff). |
 
 ---
@@ -29,12 +29,12 @@
 
 | Layer | Lựa chọn | Phiên bản | Lý do |
 | :--- | :--- | :--- | :--- |
-| **Core Framework** | **Express.js** | 4+ | Nhẹ, battle-tested, không có overhead framework phức tạp. Phù hợp với team nhỏ cần onboard nhanh và maintain dễ. |
-| **Language** | **TypeScript** | 5+ | Bắt lỗi tại compile-time, đảm bảo contract API type-safe. |
-| **ORM** | **Prisma** | 5+ | Type-safe schema, Prisma Client tự generate, hỗ trợ row-level filter `workspace_id` cho Multi-tenant dễ dàng. Migration rõ ràng. |
-| **Authentication** | **Passport.js** | — | Strategy pattern — dùng `passport-jwt`, `passport-saml`, `passport-openidconnect`. Giải quyết gọn 3 luồng Auth chỉ với config strategy. |
-| **WebSocket Server** | **`ws`** | 8+ | Native WebSocket library cho Node.js. Không có overhead protocol riêng như Socket.io. Đủ để làm Pub/Sub cho Phase 1. |
-| **Rate Limiting** | **`express-rate-limit`** + **Redis Store** | — | Áp dụng 100 req/min/user cho API chung, 10 req/min/IP cho Auth endpoint (theo NFR-SEC-02). |
+| **Core Framework** | **Express.js** | **4.22.3+** | Nhẹ, battle-tested. Bản 4.22.3+ vá các lỗi Open Redirect và XSS (CVE-2024-43796) từ dependency cũ. |
+| **Language** | **TypeScript** | **5.5+** | Bắt lỗi tại compile-time, đảm bảo contract API type-safe. |
+| **ORM** | **Prisma** | **5.20.0+** | Type-safe schema. Core ORM rất an toàn, không có CVE nghiêm trọng. Chống SQL Injection tốt bằng Parameterized Query. |
+| **Authentication** | **jsonwebtoken** | **9.0.0+** | Tự code JWT thuần để dễ kiểm soát. Bản >= 9.0.0 vá lỗi Bypass Chữ ký (CVE-2022-23540). Bắt buộc phải khai báo cứng thuật toán `algorithms: ['HS256']` (hoặc RS) khi gọi `jwt.verify()`. |
+| **WebSocket Server** | **`ws`** | **8.21.0+** | Native WebSocket library. Bản 8.21.0+ vá lỗi Memory Exhaustion DoS (CVE-2026-48779) và rò rỉ bộ nhớ (CVE-2026-45736). |
+| **Rate Limiting** | **`express-rate-limit`** + **Redis Store** | **8.7.0+** | Áp dụng 100 req/min/user. Bản 8.7.0+ vá lỗi tấn công cạn kiệt tài nguyên (CVE-2026-30827). |
 
 > **NestJS bị loại:** NestJS giải quyết bài toán của team 10+ người với nhiều module phức tạp. Phase 1 chỉ cần REST + WebSocket + RBAC, Express + các middleware nhỏ là đủ. Evaluate lại khi scale sang Phase 3+.
 
@@ -48,8 +48,8 @@
 
 | Layer | Lựa chọn | Phiên bản | Lý do |
 | :--- | :--- | :--- | :--- |
-| **Primary Database** | **PostgreSQL** | 17 | Bắt buộc theo SRS. Hỗ trợ Row-Level Security cho Multi-tenant, JSONB cho Custom Fields (Phase 4+), Foreign Key chặt chẽ giữa các bảng cùng tenant. Tối ưu hiệu năng JSON/Memory của PG17. |
-| **Caching & Pub/Sub** | **Redis** | 7+ | (1) Store cho Rate Limiting. (2) Pub/Sub để fan-out WebSocket events ra nhiều Express instances khi scale. (3) Cache session/token ngắn hạn. |
+| **Primary Database** | **PostgreSQL** | **17.x** | Bắt buộc theo SRS. Hỗ trợ RLS, JSONB. Luôn dùng minor version mới nhất để nhận security patches. |
+| **Caching & Pub/Sub** | **Redis** | **7.2.5+** | Store cho Rate Limiting, Pub/Sub, Cache. Bản >= 7.2.5 vá các lỗi RCE liên quan đến Lua Scripting (CVE-2025-49844) và tràn bộ nhớ. Cần tắt tính năng chạy Lua ngoài (nếu không cần). |
 
 ---
 
@@ -81,15 +81,15 @@
 ## 6. Tổng quan Stack (Decision Summary)
 
 ```
-Frontend:  Next.js 14 (App Router) + TypeScript + Tailwind CSS
-           Zustand (Client State) + TanStack Query (Server State + Optimistic Updates)
-           dnd-kit (Drag & Drop) + native WebSocket API
+Frontend:  Next.js 14.2.30+ (App Router) + TypeScript 5.5+ + Tailwind CSS 3.4+
+           Zustand 4.5.0+ (Client State) + TanStack Query 5.18.0+ (Server State + Optimistic Updates)
+           dnd-kit 6.1.0+ (Drag & Drop) + native WebSocket API
 
-Backend:   Express.js + TypeScript
-           Prisma ORM (PostgreSQL) + Passport.js (JWT / SAML / OIDC)
-           ws (WebSocket Server) + express-rate-limit + Redis Store
+Backend:   Express.js 4.22.3+ + TypeScript 5.5+
+           Prisma ORM 5.20.0+ (PostgreSQL) + jsonwebtoken 9.0.0+ (Tự code JWT thuần)
+           ws 8.21.0+ (WebSocket Server) + express-rate-limit 8.7.0+ + Redis Store
 
-Database:  PostgreSQL 17 (Primary) + Redis 7 (Cache / Rate Limit / Pub-Sub)
+Database:  PostgreSQL 17.x (Primary) + Redis 7.2.5+ (Cache / Rate Limit / Pub-Sub)
 
 Infra:     Docker Compose (Local) → Cloud Free Tier (Dev/Test) → Docker + VPS (Prod) → AWS ECS (Phase 3+)
 

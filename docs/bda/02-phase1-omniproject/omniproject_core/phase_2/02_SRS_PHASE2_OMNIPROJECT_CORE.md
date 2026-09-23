@@ -208,6 +208,9 @@ erDiagram
         uuid parent_task_id FK "Nullable (Self-ref)"
         string title
         uuid assignee_id "Nullable"
+        int importance "Default 5"
+        int difficulty "Default 3"
+        float action_score "Cached"
         int progress_percent "0 to 100"
         boolean is_blocked "Default false"
         string block_reason "Nullable"
