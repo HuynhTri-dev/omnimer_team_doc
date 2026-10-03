@@ -10,13 +10,14 @@
 
 ```mermaid
 flowchart TD
-    P1["✅ Phase 1: Foundation, Multi-Tenancy & Identity<br/>(Core Arch, Org, Workspace, IAM, RBAC)<br/><b>[COMPLETED]</b>"] --> P2["Phase 2: Project Management & Core Task Lifecycle<br/>(Project CRUD, Workflows, Task/Subtask, Custom Fields)"]
-    P2 --> P3["Phase 3: Core Views & Collaboration<br/>(Kanban, Table, Comments, Activity Log, Notifications)"]
+    P1["✅ Phase 1: Foundation, Multi-Tenancy & Identity<br/>(Core Arch, Org, Workspace, IAM, RBAC)<br/><b>[COMPLETED]</b>"] --> P2["✅ Phase 2: Project Management & Core Task Lifecycle<br/>(Project CRUD, Workflows, Task/Subtask, Custom Fields)<br/><b>[COMPLETED]</b>"]
+    P2 --> P3["Phase 3: Core Views & Collaboration<br/>(Kanban, Table, Comments, Activity Log, Notifications)<br/><b>[NEXT UP]</b>"]
     P3 --> P4["Phase 4: Scheduling, Critical Path & Agile Engine<br/>(Gantt, Calendar, Dependencies, Scrum/Sprint, DoD)"]
     P4 --> P5["Phase 5: Productivity, Time & Automations<br/>(Time Tracking, Smart Priority, No-Code Rules, Public Forms)"]
     P5 --> P6["Phase 6: Cross-Project, Analytics & Migration<br/>(Portfolio, Resource Capacity, Reports/Burndown, Search OQL, Import/Export)"]
 
     style P1 fill:#e6f4ea,stroke:#137333,stroke-width:2px,color:#0d652d
+    style P2 fill:#e6f4ea,stroke:#137333,stroke-width:2px,color:#0d652d
 ```
 
 ---
@@ -26,8 +27,8 @@ flowchart TD
 | Phase | Tên Giai đoạn (Phase Name) | Trạng thái (Status) | Trọng tâm Nghiệp vụ | Phân hệ Tính năng (FR Modules) | Số Sub-features | Điều kiện Tiên quyết (Prerequisites) |
 |---|---|---|---|---|---|---|
 | **Phase 1** | **Foundation, Multi-Tenancy & IAM** | <mark>**✅ Đã hoàn thành (Completed)**</mark> | Hạ tầng kỹ thuật, Định danh, Tổ chức, Phân quyền RBAC, Multi-tenant isolation | - **FR-PRJ-000**: Core Architecture, NFRs & RBAC<br/>- **FR-ORG-001**: Workspace, Org & Billing<br/>- **FR-ORG-002**: IAM, Invites & User Groups | 10 sub-features + Core Specs | None (Khởi đầu) |
-| **Phase 2** | **Project & Core Task Lifecycle** | 🔄 **Sắp triển khai (Next Up)** | Không gian dự án, Quản lý trạng thái luồng (Workflow), Thực thể Task, Subtask & Trường tùy biến | - **FR-PRJ-018**: Project Lifecycle & Templates<br/>- **FR-PRJ-002**: Dynamic Workflow & WIP Limits<br/>- **FR-PRJ-006**: Subtask Management<br/>- **FR-PRJ-004**: Dynamic Custom Fields (EAV) | 17 sub-features | Phase 1 |
-| **Phase 3** | **Execution Views & Collaboration** | ⏳ Chờ xử lý (Pending) | Giao diện làm việc trực quan (Kanban/Table), Tương tác đội ngũ realtime, Thông báo nội bộ & Không gian cá nhân | - **FR-PRJ-001.1, 001.3**: Kanban & Table View<br/>- **FR-PRJ-005**: Task Collaboration (Rich-text, Attachments, Comments, Mentions)<br/>- **FR-PRJ-015**: Personal Space & My Tasks<br/>- **FR-PRJ-013**: In-app Notification Center | 16 sub-features | Phase 2 |
+| **Phase 2** | **Project & Core Task Lifecycle** | <mark>**✅ Đã hoàn thành (Completed)**</mark> | Không gian dự án, Quản lý trạng thái luồng (Workflow), Thực thể Task, Subtask & Trường tùy biến | - **FR-PRJ-018**: Project Lifecycle & Templates<br/>- **FR-PRJ-002**: Dynamic Workflow & WIP Limits<br/>- **FR-PRJ-006**: Subtask Management<br/>- **FR-PRJ-004**: Dynamic Custom Fields (EAV) | 17 sub-features | Phase 1 |
+| **Phase 3** | **Execution Views & Collaboration** | 🔄 **Sắp triển khai (Next Up)** | Giao diện làm việc trực quan (Kanban/Table), Tương tác đội ngũ realtime, Thông báo nội bộ & Không gian cá nhân | - **FR-PRJ-001.1, 001.3**: Kanban & Table View<br/>- **FR-PRJ-005**: Task Collaboration (Rich-text, Attachments, Comments, Mentions)<br/>- **FR-PRJ-015**: Personal Space & My Tasks<br/>- **FR-PRJ-013**: In-app Notification Center | 16 sub-features | Phase 2 |
 | **Phase 4** | **Scheduling, Timeline & Agile** | ⏳ Chờ xử lý (Pending) | Kế hoạch hóa dòng thời gian, Đường găng (CPM), Khung làm việc Scrum/Sprint & Chuẩn bàn giao nghiêm ngặt | - **FR-PRJ-001.2, 001.4**: Realtime Sync & Admin Radar<br/>- **FR-PRJ-003**: Dependency & Critical Path<br/>- **FR-PRJ-016**: Calendar View (Month/Week/Day)<br/>- **FR-PRJ-009**: Scrum & Sprint Planning<br/>- **FR-PRJ-017**: Recurring Tasks (Cron/RRULE)<br/>- **FR-PRJ-008**: Strict DoD & Output Contract | 22 sub-features | Phase 3 |
 | **Phase 5** | **Productivity, Time & Automation** | ⏳ Chờ xử lý (Pending) | Tối ưu hóa năng suất cá nhân, Chấm công / Định lượng thời gian, Luật tự động hóa No-code & Tiếp nhận yêu cầu | - **FR-PRJ-014**: Time Tracking (Timer & Timesheet)<br/>- **FR-PRJ-007**: Smart Prioritization (Action Score)<br/>- **FR-PRJ-020**: No-Code Automations (Triggers, Conditions, Actions)<br/>- **FR-PRJ-021**: Public Forms & Task Intake | 19 sub-features | Phase 4 |
 | **Phase 6** | **Portfolio, Analytics & Integrations** | ⏳ Chờ xử lý (Pending) | Bức tranh tổng thể đa dự án, Cân bằng tải nhân sự, Báo cáo tiến độ chuẩn Agile, Tìm kiếm nâng cao & Chuyển đổi dữ liệu | - **FR-PRJ-010**: Portfolio & Multi-Project Dashboard<br/>- **FR-PRJ-011**: Resource & Capacity Management<br/>- **FR-PRJ-012**: Reporting & Analytics (Burndown, Velocity)<br/>- **FR-PRJ-019**: Global Search (Cmd+K, OQL)<br/>- **FR-PRJ-022**: Data Import, Export & Migration | 23 sub-features | Phase 5 |
@@ -50,27 +51,36 @@ flowchart TD
 
 ---
 
-### 📂 Phase 2: Project & Core Task Lifecycle (Quản trị Dự án & Thực thể Task)
+### 📂 Phase 2: Project & Core Task Lifecycle (Quản trị Dự án & Thực thể Task) — ✅ ĐÃ HOÀN THÀNH (COMPLETED)
+* **Trạng thái:** ✅ **Hoàn thành (Completed 30-09-2026)**
 * **Ý nghĩa:** Định nghĩa không gian làm việc (Project) và đơn vị công việc cốt lõi (Task/Subtask). Đặt ra các quy tắc về luồng trạng thái (Workflow) và khả năng mở rộng dữ liệu động (Custom Fields).
 * **Module chi tiết:**
   1. **FR-PRJ-018**: Project Lifecycle & Templates (Khởi tạo dự án, áp dụng/lưu Project Templates, Archive/Unarchive dự án).
   2. **FR-PRJ-002**: Dynamic Workflow & WIP Limits (Tùy biến cột trạng thái Statuses, Handoff rules, Cảnh báo và override giới hạn WIP).
   3. **FR-PRJ-006**: Subtask Management (Cấu trúc Task cha - con, cập nhật trạng thái độc lập, tính toán tiến độ cộng dồn Progress Roll-up).
   4. **FR-PRJ-004**: Dynamic Custom Fields (Mô hình EAV: Text, Number, Currency, Date, Dropdown, Checkbox; Validation rules, Filter & Sort).
-* **Đầu ra mong đợi:**
-  - Schema Projects, Task Statuses, Tasks, Subtasks, Custom Field Definitions & Values.
-  - Core Service APIs cho CRUD Project, Workflow Transition State Machine và Task Engine.
+* **Hiện vật nghiệm thu (Completed Deliverables):**
+  - [x] **SRS & RTM Phase 2:** [`02_SRS_PHASE2_OMNIPROJECT_CORE.md`](./phase_2/02_SRS_PHASE2_OMNIPROJECT_CORE.md) & [`03_RTM_PHASE2_OMNIPROJECT_CORE.csv`](./phase_2/03_RTM_PHASE2_OMNIPROJECT_CORE.csv).
+  - [x] **Kế hoạch & Nhật ký kỹ thuật Phase 2:** [`02_project_core_changelog.md`](file:///Users/macbookair/Downloads/omnimer_team/backend_otm/project_core/docs/change_log/02_project_core_changelog.md) (Hoàn thành 9/9 bước kỹ thuật).
+  - [x] **Tài liệu Feature Design (Giai đoạn 1 Triad):** `04_project_lifecycle_templates.md`, `05_dynamic_workflows_wip.md`, `06_dynamic_custom_fields_eav.md`, `07_subtask_progress_rollup.md`.
+  - [x] **Đặc tả API Handoff Frontend (Giai đoạn 3 Triad):** `07_project_lifecycle_templates_api.md`, `08_dynamic_workflows_wip_api.md`, `09_dynamic_custom_fields_api.md`, `10_subtask_management_api.md`.
+  - [x] **Mã nguồn Backend & Repositories:** Strict Repositories, Strategy Validators, Services, Controllers, Routes, Zod DTOs, Realtime WebSockets & Audit Trail.
+  - [x] **Kiểm thử Tự động & NFR QA/QC:** 20 Test Suites, 167 Tests (100% Pass), QA Scorecard Grade A (98.5/100), Kiểm thử thực nghiệm API 55/55 endpoints PASS (03-10-2026).
 
 ---
 
 ### 📋 Phase 3: Execution Views & Collaboration (Giao diện Thực thi & Phối hợp)
+* **Trạng thái:** 🔄 **Thiết kế SRS & RTM hoàn thành (Chờ duyệt triển khai)**
 * **Ý nghĩa:** Cung cấp trải nghiệm người dùng thực tế hàng ngày cho Dev và Member: kéo thả thẻ trên Kanban, quản lý dạng Bảng (Table), trao đổi bình luận, nhận thông báo và quản lý không gian việc cá nhân.
 * **Module chi tiết:**
   1. **FR-PRJ-001 (Part 1 - Kanban & Table)**: Chuyển đổi View Switcher, Kanban Board kéo thả mượt mà, Table View dạng bảng tính, bảo lưu bộ lọc & sắp xếp (View State).
   2. **FR-PRJ-005**: Task Collaboration (Mô tả Rich Text/Markdown, Upload File Attachments, Comment & @mention realtime, Activity Log lịch sử thay đổi).
   3. **FR-PRJ-015**: Personal Space & My Tasks (Tự động tạo "My Space", Dashboard "My Tasks" gom việc từ mọi dự án, Quick-add Task `Q`, Private Tasks).
   4. **FR-PRJ-013 (In-app)**: Notification Center (Hộp thư Inbox chuông thông báo, Đánh dấu đọc, Notification Preferences, Do Not Disturb DND).
-* **Đầu ra mong đợi:**
+* **Hiện vật nghiệm thu thiết kế (Design Deliverables):**
+  - [x] **SRS Đặc tả Yêu cầu Phần mềm:** [`04_SRS_PHASE3_EXECUTION_VIEWS_COLLABORATION.md`](./phase_3/04_SRS_PHASE3_EXECUTION_VIEWS_COLLABORATION.md) (Chuẩn IEEE 830, Data Model ERD, Event Bus v2, Real-time Collaboration & Activity Stream, Detailed API Contracts & Wireframes).
+  - [x] **RTM Ma trận Truy vết Yêu cầu:** [`05_RTM_PHASE3_EXECUTION_VIEWS_COLLABORATION.csv`](./phase_3/05_RTM_PHASE3_EXECUTION_VIEWS_COLLABORATION.csv) (Mapping toàn diện 160 test case Gherkin cho 4 phân hệ FR-PRJ-001, 005, 015, 013).
+* **Đầu ra thực thi sắp tới (Execution Deliverables):**
   - WebSocket/SSE Event bus cho Real-time Collaboration & Activity Stream.
   - Giao diện người dùng cốt lõi (Kanban Board, Table View, Task Detail Modal, My Tasks).
 
