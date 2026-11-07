@@ -12,14 +12,15 @@
 flowchart TD
     P1["✅ Phase 1: Foundation, Multi-Tenancy & Identity<br/>(Core Arch, Org, Workspace, IAM, RBAC)<br/><b>[COMPLETED]</b>"] --> P2["✅ Phase 2: Project Management & Core Task Lifecycle<br/>(Project CRUD, Workflows, Task/Subtask, Custom Fields)<br/><b>[COMPLETED]</b>"]
     P2 --> P3["✅ Phase 3: Core Views & Collaboration<br/>(Kanban, Table, Comments, Activity Log, Notifications)<br/><b>[COMPLETED]</b>"]
-    P3 --> P4["🔄 Phase 4: Scheduling, Critical Path & Agile Engine<br/>(Gantt, Calendar, Dependencies, Scrum/Sprint, DoD)<br/><b>[IN PROGRESS]</b>"]
-    P4 --> P5["Phase 5: Productivity, Time & Automations<br/>(Time Tracking, Smart Priority, No-Code Rules, Public Forms)"]
+    P3 --> P4["✅ Phase 4: Scheduling, Critical Path & Agile Engine<br/>(Gantt, Calendar, Dependencies, Scrum/Sprint, DoD)<br/><b>[COMPLETED]</b>"]
+    P4 --> P5["🔄 Phase 5: Productivity, Time & Automations<br/>(Time Tracking, Smart Priority, No-Code Rules, Public Forms)<br/><b>[IN PROGRESS]</b>"]
     P5 --> P6["Phase 6: Cross-Project, Analytics & Migration<br/>(Portfolio, Resource Capacity, Reports/Burndown, Search OQL, Import/Export)"]
 
     style P1 fill:#e6f4ea,stroke:#137333,stroke-width:2px,color:#0d652d
     style P2 fill:#e6f4ea,stroke:#137333,stroke-width:2px,color:#0d652d
     style P3 fill:#e6f4ea,stroke:#137333,stroke-width:2px,color:#0d652d
-    style P4 fill:#e8f0fe,stroke:#1a73e8,stroke-width:2px,color:#174ea6
+    style P4 fill:#e6f4ea,stroke:#137333,stroke-width:2px,color:#0d652d
+    style P5 fill:#e8f0fe,stroke:#1a73e8,stroke-width:2px,color:#174ea6
 ```
 
 ---
@@ -31,8 +32,8 @@ flowchart TD
 | **Phase 1** | **Foundation, Multi-Tenancy & IAM** | <mark>**✅ Đã hoàn thành (Completed)**</mark> | Hạ tầng kỹ thuật, Định danh, Tổ chức, Phân quyền RBAC, Multi-tenant isolation | - **FR-PRJ-000**: Core Architecture, NFRs & RBAC<br/>- **FR-ORG-001**: Workspace, Org & Billing<br/>- **FR-ORG-002**: IAM, Invites & User Groups | 10 sub-features + Core Specs | None (Khởi đầu) |
 | **Phase 2** | **Project & Core Task Lifecycle** | <mark>**✅ Đã hoàn thành (Completed)**</mark> | Không gian dự án, Quản lý trạng thái luồng (Workflow), Thực thể Task, Subtask & Trường tùy biến | - **FR-PRJ-018**: Project Lifecycle & Templates<br/>- **FR-PRJ-002**: Dynamic Workflow & WIP Limits<br/>- **FR-PRJ-006**: Subtask Management<br/>- **FR-PRJ-004**: Dynamic Custom Fields (EAV) | 17 sub-features | Phase 1 |
 | **Phase 3** | **Execution Views & Collaboration** | <mark>**✅ Đã hoàn thành (Completed)**</mark> | Giao diện làm việc trực quan (Kanban/Table), Tương tác đội ngũ realtime, Thông báo nội bộ & Không gian cá nhân | - **FR-PRJ-001.1, 001.3**: Kanban & Table View<br/>- **FR-PRJ-005**: Task Collaboration (Rich-text, Attachments, Comments, Mentions)<br/>- **FR-PRJ-015**: Personal Space & My Tasks<br/>- **FR-PRJ-013**: In-app Notification Center | 16 sub-features | Phase 2 |
-| **Phase 4** | **Scheduling, Timeline & Agile** | 🔄 **Đang triển khai (In Progress)** | Kế hoạch hóa dòng thời gian, Đường găng (CPM), Khung làm việc Scrum/Sprint & Chuẩn bàn giao nghiêm ngặt | - **FR-PRJ-001.2, 001.4**: Realtime Sync & Admin Radar<br/>- **FR-PRJ-003**: Dependency & Critical Path<br/>- **FR-PRJ-016**: Calendar View (Month/Week/Day)<br/>- **FR-PRJ-009**: Scrum & Sprint Planning<br/>- **FR-PRJ-017**: Recurring Tasks (Cron/RRULE)<br/>- **FR-PRJ-008**: Strict DoD & Output Contract | 22 sub-features | Phase 3 |
-| **Phase 5** | **Productivity, Time & Automation** | ⏳ Chờ xử lý (Pending) | Tối ưu hóa năng suất cá nhân, Chấm công / Định lượng thời gian, Luật tự động hóa No-code & Tiếp nhận yêu cầu | - **FR-PRJ-014**: Time Tracking (Timer & Timesheet)<br/>- **FR-PRJ-007**: Smart Prioritization (Action Score)<br/>- **FR-PRJ-020**: No-Code Automations (Triggers, Conditions, Actions)<br/>- **FR-PRJ-021**: Public Forms & Task Intake | 19 sub-features | Phase 4 |
+| **Phase 4** | **Scheduling, Timeline & Agile** | <mark>**✅ Đã hoàn thành (Completed 08-11-2026)**</mark> | Kế hoạch hóa dòng thời gian, Đường găng (CPM), Khung làm việc Scrum/Sprint & Chuẩn bàn giao nghiêm ngặt | - **FR-PRJ-001.2, 001.4**: Realtime Sync & Admin Radar<br/>- **FR-PRJ-003**: Dependency & Critical Path<br/>- **FR-PRJ-016**: Calendar View (Month/Week/Day)<br/>- **FR-PRJ-009**: Scrum & Sprint Planning<br/>- **FR-PRJ-017**: Recurring Tasks (Cron/RRULE)<br/>- **FR-PRJ-008**: Strict DoD & Output Contract | 22 sub-features | Phase 3 |
+| **Phase 5** | **Productivity, Time & Automation** | 🔄 **Đang triển khai (In Progress)** | Tối ưu hóa năng suất cá nhân, Chấm công / Định lượng thời gian, Luật tự động hóa No-code & Tiếp nhận yêu cầu | - **FR-PRJ-014**: Time Tracking (Timer & Timesheet)<br/>- **FR-PRJ-007**: Smart Prioritization (Action Score)<br/>- **FR-PRJ-020**: No-Code Automations (Triggers, Conditions, Actions)<br/>- **FR-PRJ-021**: Public Forms & Task Intake | 19 sub-features | Phase 4 |
 | **Phase 6** | **Portfolio, Analytics & Integrations** | ⏳ Chờ xử lý (Pending) | Bức tranh tổng thể đa dự án, Cân bằng tải nhân sự, Báo cáo tiến độ chuẩn Agile, Tìm kiếm nâng cao & Chuyển đổi dữ liệu | - **FR-PRJ-010**: Portfolio & Multi-Project Dashboard<br/>- **FR-PRJ-011**: Resource & Capacity Management<br/>- **FR-PRJ-012**: Reporting & Analytics (Burndown, Velocity)<br/>- **FR-PRJ-019**: Global Search (Cmd+K, OQL)<br/>- **FR-PRJ-022**: Data Import, Export & Migration | 23 sub-features | Phase 5 |
 
 ---
@@ -89,15 +90,15 @@ flowchart TD
 
 ---
 
-### ⏱ Phase 4: Scheduling, Timeline & Agile Engine (Kế hoạch hóa & Khung Agile)
-* **Trạng thái:** 🔄 **Đang triển khai (In Progress — Đã hoàn thành SRS, RTM & Kế hoạch kỹ thuật 5/5 FRs, 4 Tasks đang Active trên Board)**
+### ⏱ Phase 4: Scheduling, Timeline & Agile Engine (Kế hoạch hóa & Khung Agile) — ✅ ĐÃ HOÀN THÀNH (COMPLETED)
+* **Trạng thái:** ✅ **Hoàn thành (Completed 08-11-2026)**
 * **Ý nghĩa:** Nâng cấp hệ thống từ công cụ ghi nhận công việc thành một **Enterprise PMIS thực thụ**: có khả năng tính toán đường găng, dự báo rủi ro trễ hạn, điều phối Gantt/Calendar và chu trình Sprint của Scrum.
 * **Module chi tiết:**
-  1. **Phase 4A (Core Agile & Scheduling Engine) — [Ưu tiên số 1 - Triển khai ngay]:**
+  1. **Phase 4A (Core Agile & Scheduling Engine):**
      - **FR-PRJ-009**: Scrum & Sprint Management (Sprint Planning Workspace, Khóa 1 Active Sprint `BL-PRJ-009.1`, Start/Complete Sprint & Rollover `BL-PRJ-009.4`).
      - **FR-PRJ-016**: Calendar View (Chế độ hiển thị Month/Week/Day, kéo thả đổi Due Date, Quick-add từ ô ngày trống, Unscheduled Tasks).
      - **FR-PRJ-008**: Strict DoD & Output Contract (Ràng buộc đầu ra bắt buộc: File/Figma/PR, Done Blocker `BL-PRJ-008.2`, Ngoại lệ Personal Space `BL-PRJ-008.4`).
-  2. **Phase 4B (Timeline, Dependencies & Risk Radar) — [Ưu tiên số 2]:**
+  2. **Phase 4B (Timeline, Dependencies & Risk Radar):**
      - **FR-PRJ-001 (Part 2 - Gantt & Radar)**: Gantt Chart thời gian thực, Admin Radar cảnh báo Task khẩn cấp/blocked.
      - **FR-PRJ-003**: Dependency & Critical Path (4 loại liên kết FS/SS/FF/SF, Cycle Detection DAG, Auto-scheduling lan truyền tiến độ, Đường găng CPM).
      - **FR-PRJ-017**: Recurring Tasks (Thiết lập chu kỳ lặp RRULE/Cron, tự sinh Task mới khi Done, quản lý Series).
@@ -106,12 +107,14 @@ flowchart TD
   - [x] **RTM Ma trận Truy vết:** [`07_RTM_PHASE4A_CORE_AGILE_SCHEDULING_ENGINE.csv`](./phase_4/07_RTM_PHASE4A_CORE_AGILE_SCHEDULING_ENGINE.csv) (Mapping FR -> User Stories Gherkin -> Test Cases đầy đủ 37 test cases cho cả 5 FRs).
   - [x] **Backend Implementation Plan & Changelog:** [`04_phase4a_agile_scheduling_engine_changelog.md`](file:///Users/macbookair/Downloads/source/omnimer_team/backend_otm/project_core/docs/change_log/04_phase4a_agile_scheduling_engine_changelog.md).
   - [x] **Frontend Implementation Plan & Changelog:** [`04_phase4a_frontend_agile_scheduling_changelog.md`](file:///Users/macbookair/Downloads/source/omnimer_team/frontend_otm/website_otm/docs/change_log/04_phase4a_frontend_agile_scheduling_changelog.md).
-  - [ ] **Mã nguồn Backend:** Prisma Migration (Sprint, TaskDependency, DoD fields), Repositories, Services, Controllers & Unit Tests.
-  - [ ] **Mã nguồn Frontend:** Sprint Planning Workspace, Interactive Calendar View, Strict DoD Done-blocker Modal & E2E Tests.
+  - [x] **Mã nguồn Backend:** Prisma Migration (Sprint, TaskDependency, DoD fields), Repositories, Services, Controllers & Unit Tests (42 Test Suites, 406 Tests PASS 100%).
+  - [x] **Mã nguồn Frontend:** Sprint Planning Workspace, Interactive Calendar View, Strict DoD Done-blocker Modal & E2E Tests.
+  - [x] **Nghiệm thu Live Board:** Chuyển toàn bộ 5/5 Tasks FR Phase 4 sang cột DONE trên Live PMIS Board.
 
 ---
 
-### ⚡ Phase 5: Productivity, Time & Automations (Năng suất & Tự động hóa)
+### ⚡ Phase 5: Productivity, Time & Automations (Năng suất & Tự động hóa) — 🔄 ĐANG TRIỂN KHAI (IN PROGRESS)
+* **Trạng thái:** 🔄 **Đang triển khai (In Progress — Đã hoàn thành SRS, RTM & Kế hoạch kỹ thuật 4/4 FRs, đã active trên Board)**
 * **Ý nghĩa:** Tự động hóa quy trình lặp lại, tiết kiệm thời gian cho đội ngũ, chấm công/đo lường nỗ lực thực tế và mở cổng tiếp nhận yêu cầu từ người dùng bên ngoài.
 * **Module chi tiết:**
   1. **FR-PRJ-014**: Time Tracking (Timer đếm giờ realtime, Manual Log, so sánh estimated vs actual, Timesheet tuần, Xuất Time Report).
@@ -155,9 +158,13 @@ Theo quy trình BDA & Triết lý Phát triển chuẩn chỉ:
 4. ~~**Triển khai Phase 3: Execution Views & Collaboration**~~: *(✅ Hoàn thành 07-11-2026)*
    - ✅ Đã hoàn tất **SRS & RTM Phase 3**, Kanban Board, Virtual Table View, Realtime WebSocket Event Bus, Notifications, Task Collaboration.
    - ✅ Đã nghiệm thu toàn bộ 16/16 tasks chuyển sang trạng thái DONE trên Live PMIS Board.
-5. 🔄 **Đang triển khai Phase 4: Scheduling, Timeline & Agile Engine**:
-   - ✅ Đã di chuyển và phân cụm 5 FR (`FR-PRJ-009`, `FR-PRJ-016`, `FR-PRJ-008`, `FR-PRJ-003`, `FR-PRJ-017`) vào `phase_4/`.
+5. ~~**Triển khai Phase 4: Scheduling, Timeline & Agile Engine**~~: *(✅ Hoàn thành 08-11-2026)*
    - ✅ Đã hoàn tất **SRS Hợp nhất:** [`06_SRS_PHASE4A_CORE_AGILE_SCHEDULING_ENGINE.md`](./phase_4/06_SRS_PHASE4A_CORE_AGILE_SCHEDULING_ENGINE.md).
    - ✅ Đã hoàn tất **RTM 37 Test Cases:** [`07_RTM_PHASE4A_CORE_AGILE_SCHEDULING_ENGINE.csv`](./phase_4/07_RTM_PHASE4A_CORE_AGILE_SCHEDULING_ENGINE.csv).
-   - ✅ Đã biên soạn kế hoạch thay đổi kỹ thuật Backend & Frontend Changelogs.
-   - 🔄 Sẵn sàng kích hoạt lệnh `/code` để bắt đầu lập trình và kiểm thử tự động.
+   - ✅ Đã hoàn tất Backend APIs (Sprint, Calendar, Strict DoD, CPM Dependencies, Recurring RRULE) & Unit Tests PASS 100%.
+   - ✅ Đã hoàn tất Frontend UI (Scrum Planning Workspace, Task Calendar View, DoD Interceptor, Dependency Manager, RRULE Picker).
+   - ✅ Đã chuyển toàn bộ 5/5 Tasks Phase 4 sang cột DONE trên Live PMIS Board.
+6. 🔄 **Đang triển khai Phase 5: Productivity, Time & Automations**:
+   - ✅ Đã hoàn tất **SRS Hợp nhất:** [`08_SRS_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.md`](./phase_5/08_SRS_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.md).
+   - ✅ Đã hoàn tất **RTM 48 Test Cases:** [`09_RTM_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.csv`](./phase_5/09_RTM_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.csv).
+   - 🔄 Chuyển các tasks Phase 5 sang trạng thái **In Progress** trên Live PMIS Board và sẵn sàng triển khai lập trình.
