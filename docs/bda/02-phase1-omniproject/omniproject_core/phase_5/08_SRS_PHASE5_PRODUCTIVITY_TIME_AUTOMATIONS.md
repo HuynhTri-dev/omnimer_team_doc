@@ -803,3 +803,4 @@ Feature: Public Intake Form & Spam Protection
     And Một Task mới tự động được tạo ra tại cột "Inbox" của dự án Hỗ trợ Khách hàng
     And File ảnh chụp được gắn an toàn vào mục Attachments của Task
 ```
+
