@@ -69,8 +69,8 @@ flowchart TD
 
 ---
 
-### 📋 Phase 3: Execution Views & Collaboration (Giao diện Thực thi & Phối hợp)
-* **Trạng thái:** 🔄 **Thiết kế SRS & RTM hoàn thành (Chờ duyệt triển khai)**
+### 📋 Phase 3: Execution Views & Collaboration (Giao diện Thực thi & Phối hợp) — ✅ ĐÃ HOÀN THÀNH (COMPLETED)
+* **Trạng thái:** ✅ **Hoàn thành (Completed 07-11-2026)**
 * **Ý nghĩa:** Cung cấp trải nghiệm người dùng thực tế hàng ngày cho Dev và Member: kéo thả thẻ trên Kanban, quản lý dạng Bảng (Table), trao đổi bình luận, nhận thông báo và quản lý không gian việc cá nhân.
 * **Module chi tiết:**
   1. **FR-PRJ-001 (Part 1 - Kanban & Table)**: Chuyển đổi View Switcher, Kanban Board kéo thả mượt mà, Table View dạng bảng tính, bảo lưu bộ lọc & sắp xếp (View State).
@@ -80,24 +80,30 @@ flowchart TD
 * **Hiện vật nghiệm thu thiết kế (Design Deliverables):**
   - [x] **SRS Đặc tả Yêu cầu Phần mềm:** [`04_SRS_PHASE3_EXECUTION_VIEWS_COLLABORATION.md`](./phase_3/04_SRS_PHASE3_EXECUTION_VIEWS_COLLABORATION.md) (Chuẩn IEEE 830, Data Model ERD, Event Bus v2, Real-time Collaboration & Activity Stream, Detailed API Contracts & Wireframes).
   - [x] **RTM Ma trận Truy vết Yêu cầu:** [`05_RTM_PHASE3_EXECUTION_VIEWS_COLLABORATION.csv`](./phase_3/05_RTM_PHASE3_EXECUTION_VIEWS_COLLABORATION.csv) (Mapping toàn diện 160 test case Gherkin cho 4 phân hệ FR-PRJ-001, 005, 015, 013).
-* **Đầu ra thực thi sắp tới (Execution Deliverables):**
-  - WebSocket/SSE Event bus cho Real-time Collaboration & Activity Stream.
-  - Giao diện người dùng cốt lõi (Kanban Board, Table View, Task Detail Modal, My Tasks).
+* **Đầu ra thực thi (Execution Deliverables):**
+  - [x] WebSocket/SSE Event bus cho Real-time Collaboration & Activity Stream (`ws:project`, `ws:task`, `ws:user`).
+  - [x] Giao diện người dùng cốt lõi (Kanban Board, Virtual Table View, Task Detail Modal/Drawer, My Tasks, In-app Notification Center).
+  - [x] Kiểm thử tự động E2E Playwright và tích hợp Edge Cloudflare Workers (100% Pass 16/16 Tasks in DONE).
 
 ---
 
 ### ⏱ Phase 4: Scheduling, Timeline & Agile Engine (Kế hoạch hóa & Khung Agile)
+* **Trạng thái:** 🔄 **Thiết kế SRS & RTM Phase 4A hoàn thành (Chờ lệnh `/code` triển khai)**
 * **Ý nghĩa:** Nâng cấp hệ thống từ công cụ ghi nhận công việc thành một **Enterprise PMIS thực thụ**: có khả năng tính toán đường găng, dự báo rủi ro trễ hạn, điều phối Gantt/Calendar và chu trình Sprint của Scrum.
 * **Module chi tiết:**
-  1. **FR-PRJ-001 (Part 2 - Gantt & Radar)**: Gantt Chart thời gian thực, Admin Radar cảnh báo Task khẩn cấp/blocked.
-  2. **FR-PRJ-003**: Dependency & Critical Path (4 loại liên kết FS/SS/FF/SF, Cycle Detection thuật ngữ đồ thị DAG, Auto-scheduling lan truyền tiến độ, Đường găng CPM).
-  3. **FR-PRJ-016**: Calendar View (Chế độ hiển thị Month/Week/Day, kéo thả đổi Due Date, Cross-project Calendar).
-  4. **FR-PRJ-009**: Scrum & Sprint Management (Sprint Planning, Kéo thả Backlog vào Sprint, Start/Complete Sprint & Rollover việc dở dang).
-  5. **FR-PRJ-017**: Recurring Tasks (Thiết lập chu kỳ lặp RRULE/Cron, tự sinh Task mới khi Done, quản lý Series).
-  6. **FR-PRJ-008**: Strict DoD & Output Contract (Ràng buộc đầu ra bắt buộc: File/Figma/PR, Done Blocker, Asset Sync sang kho tri thức).
-* **Đầu ra mong đợi:**
-  - Thuật toán tính Critical Path Method (CPM) & DAG Topological Sort.
-  - Sprint Cycle Engine & Khóa chặn nghiệm thu DoD.
+  1. **Phase 4A (Core Agile & Scheduling Engine) — [Ưu tiên số 1 - Triển khai ngay]:**
+     - **FR-PRJ-009**: Scrum & Sprint Management (Sprint Planning Workspace, Khóa 1 Active Sprint `BL-PRJ-009.1`, Start/Complete Sprint & Rollover `BL-PRJ-009.4`).
+     - **FR-PRJ-016**: Calendar View (Chế độ hiển thị Month/Week/Day, kéo thả đổi Due Date, Quick-add từ ô ngày trống, Unscheduled Tasks).
+     - **FR-PRJ-008**: Strict DoD & Output Contract (Ràng buộc đầu ra bắt buộc: File/Figma/PR, Done Blocker `BL-PRJ-008.2`, Ngoại lệ Personal Space `BL-PRJ-008.4`).
+  2. **Phase 4B (Timeline, Dependencies & Risk Radar) — [Ưu tiên số 2]:**
+     - **FR-PRJ-001 (Part 2 - Gantt & Radar)**: Gantt Chart thời gian thực, Admin Radar cảnh báo Task khẩn cấp/blocked.
+     - **FR-PRJ-003**: Dependency & Critical Path (4 loại liên kết FS/SS/FF/SF, Cycle Detection DAG, Auto-scheduling lan truyền tiến độ, Đường găng CPM).
+     - **FR-PRJ-017**: Recurring Tasks (Thiết lập chu kỳ lặp RRULE/Cron, tự sinh Task mới khi Done, quản lý Series).
+* **Hiện vật nghiệm thu Phase 4A (Phase 4A Deliverables):**
+  - [x] **SRS Đặc tả Yêu cầu Phần mềm:** [`06_SRS_PHASE4A_CORE_AGILE_SCHEDULING_ENGINE.md`](./phase_4/06_SRS_PHASE4A_CORE_AGILE_SCHEDULING_ENGINE.md) (Chuẩn IEEE 830, Data Dictionary, API Contracts, State Machines, Wireframes, NFRs).
+  - [x] **RTM Ma trận Truy vết:** [`07_RTM_PHASE4A_CORE_AGILE_SCHEDULING_ENGINE.csv`](./phase_4/07_RTM_PHASE4A_CORE_AGILE_SCHEDULING_ENGINE.csv) (Mapping FR -> User Stories Gherkin -> Test Cases).
+  - [x] **Backend Implementation Plan & Changelog:** [`04_phase4a_agile_scheduling_engine_changelog.md`](file:///Users/macbookair/Downloads/source/omnimer_team/backend_otm/project_core/docs/change_log/04_phase4a_agile_scheduling_engine_changelog.md).
+  - [x] **Frontend Implementation Plan & Changelog:** [`04_phase4a_frontend_agile_scheduling_changelog.md`](file:///Users/macbookair/Downloads/source/omnimer_team/frontend_otm/website_otm/docs/change_log/04_phase4a_frontend_agile_scheduling_changelog.md).
 
 ---
 
