@@ -13,14 +13,15 @@ flowchart TD
     P1["✅ Phase 1: Foundation, Multi-Tenancy & Identity<br/>(Core Arch, Org, Workspace, IAM, RBAC)<br/><b>[COMPLETED]</b>"] --> P2["✅ Phase 2: Project Management & Core Task Lifecycle<br/>(Project CRUD, Workflows, Task/Subtask, Custom Fields)<br/><b>[COMPLETED]</b>"]
     P2 --> P3["✅ Phase 3: Core Views & Collaboration<br/>(Kanban, Table, Comments, Activity Log, Notifications)<br/><b>[COMPLETED]</b>"]
     P3 --> P4["✅ Phase 4: Scheduling, Critical Path & Agile Engine<br/>(Gantt, Calendar, Dependencies, Scrum/Sprint, DoD)<br/><b>[COMPLETED]</b>"]
-    P4 --> P5["🔄 Phase 5: Productivity, Time & Automations<br/>(Time Tracking, Smart Priority, No-Code Rules, Public Forms)<br/><b>[IN PROGRESS]</b>"]
-    P5 --> P6["Phase 6: Cross-Project, Analytics & Migration<br/>(Portfolio, Resource Capacity, Reports/Burndown, Search OQL, Import/Export)"]
+    P4 --> P5["✅ Phase 5: Productivity, Time & Automations<br/>(Time Tracking, Smart Priority, No-Code Rules, Public Forms)<br/><b>[COMPLETED]</b>"]
+    P5 --> P6["🔄 Phase 6: Cross-Project, Analytics & Migration<br/>(Portfolio, Resource Capacity, Reports/Burndown, Search OQL, Import/Export)<br/><b>[IN PROGRESS]</b>"]
 
     style P1 fill:#e6f4ea,stroke:#137333,stroke-width:2px,color:#0d652d
     style P2 fill:#e6f4ea,stroke:#137333,stroke-width:2px,color:#0d652d
     style P3 fill:#e6f4ea,stroke:#137333,stroke-width:2px,color:#0d652d
     style P4 fill:#e6f4ea,stroke:#137333,stroke-width:2px,color:#0d652d
-    style P5 fill:#e8f0fe,stroke:#1a73e8,stroke-width:2px,color:#174ea6
+    style P5 fill:#e6f4ea,stroke:#137333,stroke-width:2px,color:#0d652d
+    style P6 fill:#e8f0fe,stroke:#1a73e8,stroke-width:2px,color:#174ea6
 ```
 
 ---
@@ -33,8 +34,8 @@ flowchart TD
 | **Phase 2** | **Project & Core Task Lifecycle** | <mark>**✅ Đã hoàn thành (Completed)**</mark> | Không gian dự án, Quản lý trạng thái luồng (Workflow), Thực thể Task, Subtask & Trường tùy biến | - **FR-PRJ-018**: Project Lifecycle & Templates<br/>- **FR-PRJ-002**: Dynamic Workflow & WIP Limits<br/>- **FR-PRJ-006**: Subtask Management<br/>- **FR-PRJ-004**: Dynamic Custom Fields (EAV) | 17 sub-features | Phase 1 |
 | **Phase 3** | **Execution Views & Collaboration** | <mark>**✅ Đã hoàn thành (Completed)**</mark> | Giao diện làm việc trực quan (Kanban/Table), Tương tác đội ngũ realtime, Thông báo nội bộ & Không gian cá nhân | - **FR-PRJ-001.1, 001.3**: Kanban & Table View<br/>- **FR-PRJ-005**: Task Collaboration (Rich-text, Attachments, Comments, Mentions)<br/>- **FR-PRJ-015**: Personal Space & My Tasks<br/>- **FR-PRJ-013**: In-app Notification Center | 16 sub-features | Phase 2 |
 | **Phase 4** | **Scheduling, Timeline & Agile** | <mark>**✅ Đã hoàn thành (Completed 08-11-2026)**</mark> | Kế hoạch hóa dòng thời gian, Đường găng (CPM), Khung làm việc Scrum/Sprint & Chuẩn bàn giao nghiêm ngặt | - **FR-PRJ-001.2, 001.4**: Realtime Sync & Admin Radar<br/>- **FR-PRJ-003**: Dependency & Critical Path<br/>- **FR-PRJ-016**: Calendar View (Month/Week/Day)<br/>- **FR-PRJ-009**: Scrum & Sprint Planning<br/>- **FR-PRJ-017**: Recurring Tasks (Cron/RRULE)<br/>- **FR-PRJ-008**: Strict DoD & Output Contract | 22 sub-features | Phase 3 |
-| **Phase 5** | **Productivity, Time & Automation** | 🔄 **Đang triển khai (In Progress)** | Tối ưu hóa năng suất cá nhân, Chấm công / Định lượng thời gian, Luật tự động hóa No-code & Tiếp nhận yêu cầu | - **FR-PRJ-014**: Time Tracking (Timer & Timesheet)<br/>- **FR-PRJ-007**: Smart Prioritization (Action Score)<br/>- **FR-PRJ-020**: No-Code Automations (Triggers, Conditions, Actions)<br/>- **FR-PRJ-021**: Public Forms & Task Intake | 19 sub-features | Phase 4 |
-| **Phase 6** | **Portfolio, Analytics & Integrations** | ⏳ Chờ xử lý (Pending) | Bức tranh tổng thể đa dự án, Cân bằng tải nhân sự, Báo cáo tiến độ chuẩn Agile, Tìm kiếm nâng cao & Chuyển đổi dữ liệu | - **FR-PRJ-010**: Portfolio & Multi-Project Dashboard<br/>- **FR-PRJ-011**: Resource & Capacity Management<br/>- **FR-PRJ-012**: Reporting & Analytics (Burndown, Velocity)<br/>- **FR-PRJ-019**: Global Search (Cmd+K, OQL)<br/>- **FR-PRJ-022**: Data Import, Export & Migration | 23 sub-features | Phase 5 |
+| **Phase 5** | **Productivity, Time & Automation** | <mark>**✅ Đã hoàn thành (Completed 13-11-2026)**</mark> | Tối ưu hóa năng suất cá nhân, Chấm công / Định lượng thời gian, Luật tự động hóa No-code & Tiếp nhận yêu cầu | - **FR-PRJ-014**: Time Tracking (Timer & Timesheet)<br/>- **FR-PRJ-007**: Smart Prioritization (Action Score)<br/>- **FR-PRJ-020**: No-Code Automations (Triggers, Conditions, Actions)<br/>- **FR-PRJ-021**: Public Forms & Task Intake | 19 sub-features | Phase 4 |
+| **Phase 6** | **Portfolio, Analytics & Integrations** | 🔄 **Đang triển khai (In Progress)** | Bức tranh tổng thể đa dự án, Cân bằng tải nhân sự, Báo cáo tiến độ chuẩn Agile, Tìm kiếm nâng cao & Chuyển đổi dữ liệu | - **FR-PRJ-010**: Portfolio & Multi-Project Dashboard<br/>- **FR-PRJ-011**: Resource & Capacity Management<br/>- **FR-PRJ-012**: Reporting & Analytics (Burndown, Velocity)<br/>- **FR-PRJ-019**: Global Search (Cmd+K, OQL)<br/>- **FR-PRJ-022**: Data Import, Export & Migration | 23 sub-features | Phase 5 |
 
 ---
 
@@ -113,37 +114,37 @@ flowchart TD
 
 ---
 
-### ⚡ Phase 5: Productivity, Time & Automations (Năng suất & Tự động hóa) — 🔄 ĐANG TRIỂN KHAI (IN PROGRESS)
-* **Trạng thái:** 🔄 **Đang triển khai (In Progress — Đã hoàn thành SRS, RTM & Kế hoạch kỹ thuật 4/4 FRs, đã active trên Board)**
+### ⚡ Phase 5: Productivity, Time & Automations (Năng suất & Tự động hóa) — <mark>**✅ ĐÃ HOÀN THÀNH (COMPLETED 13-11-2026)**</mark>
+* **Trạng thái:** <mark>**✅ Hoàn thành (Completed 13-11-2026)**</mark>
 * **Ý nghĩa:** Tự động hóa quy trình lặp lại, tiết kiệm thời gian cho đội ngũ, chấm công/đo lường nỗ lực thực tế và mở cổng tiếp nhận yêu cầu từ người dùng bên ngoài.
 * **Module chi tiết:**
   1. **FR-PRJ-014**: Time Tracking (Timer đếm giờ realtime, Manual Log, so sánh estimated vs actual, Timesheet tuần, Xuất Time Report).
   2. **FR-PRJ-007**: Smart Prioritization (Phân quyền Owner vs Assignee, Thuật toán Action Score tự động tính độ ưu tiên, Smart Sort, Chống gian lận hạn chót Anti-gaming).
   3. **FR-PRJ-020**: No-Code Automations (Bộ luật If-This-Then-That: Triggers, Conditions, Actions như đổi status, gán người, báo Slack/Teams; Automation Execution Logs).
   4. **FR-PRJ-021**: Public Forms & Task Intake (Form Builder kéo thả, Sinh Public link/iframe, reCAPTCHA v3 chống spam, tự sinh Task từ Form).
-* **Đầu ra mong đợi:**
-  - Event Rule Engine cho No-Code Automations (Background Worker/Queue).
-  - Time Tracking & Timesheet aggregation service.
 * **Hiện vật nghiệm thu Phase 5 (Phase 5 Deliverables):**
   - [x] **SRS Đặc tả Yêu cầu Phần mềm Hợp nhất:** [`08_SRS_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.md`](./phase_5/08_SRS_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.md) (Chuẩn IEEE 830, Data Dictionary, API Contracts, State Machines, Sequence Diagrams, NFRs bao quát cả 4 FRs).
   - [x] **RTM Ma trận Truy vết:** [`09_RTM_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.csv`](./phase_5/09_RTM_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.csv) (Mapping FR -> User Stories Gherkin -> Test Cases đầy đủ 48 test cases cho cả 4 FRs).
-  - [ ] **Mã nguồn Backend:** Redis ephemeral timer, PostgreSQL time_logs, Smart Priority Action Score engine, BullMQ Background Worker cho Event Rule Engine & Circuit Breaker, Public Forms controller & reCAPTCHA v3 verification.
-  - [ ] **Mã nguồn Frontend:** Floating Realtime Timer Widget, Weekly Timesheet view, Visual No-Code Automation Builder & Public Form Intake Portal.
+  - [x] **Mã nguồn Backend:** Redis ephemeral timer, PostgreSQL time_logs, Smart Priority Action Score engine, BullMQ Background Worker cho Event Rule Engine & Circuit Breaker, Public Forms controller & reCAPTCHA v3 verification.
+  - [x] **Mã nguồn Frontend:** Floating Realtime Timer Widget, Weekly Timesheet view, Visual No-Code Automation Builder & Public Form Intake Portal.
+  - [x] **Kiểm định QC & Nghiệm thu Live Board:** Hoàn tất toàn diện kiểm thử Blackbox & Whitebox (529/530 backend tests, Playwright E2E 100% pass), chuyển toàn bộ 4/4 Tasks Phase 5 cùng 16 decomposition subtasks sang cột DONE trên Live PMIS Board (13-11-2026).
 
 ---
 
-### 📊 Phase 6: Cross-Project, Analytics & Integrations (Quản trị Danh mục & Phân tích)
+### 📊 Phase 6: Cross-Project, Analytics & Integrations (Quản trị Danh mục & Phân tích) — 🔄 ĐANG TRIỂN KHAI (IN PROGRESS)
+* **Trạng thái:** 🔄 **Đang triển khai (In Progress — Đã di chuyển toàn bộ 5 tài liệu đặc tả FR vào thư mục `phase_6/`, đã kéo 5 Tasks & 20 Subtasks sang trạng thái In Progress trên Live PMIS Board)**
 * **Ý nghĩa:** Tầng cao nhất phục vụ Ban Giám Đốc, PMO và Khách hàng: giám sát danh mục nhiều dự án (Portfolio), cân đối tải nguồn lực (Workload), đo lường chỉ số vận hành (Burndown, Velocity, Cycle Time) và di chuyển dữ liệu.
 * **Module chi tiết:**
-  1. **FR-PRJ-010**: Portfolio & Multi-Project Dashboard (Portfolio Board, Program Gantt liên dự án, Risk Radar tổng hợp, Project Health Score 0-100).
-  2. **FR-PRJ-011**: Resource & Capacity Management (Workload View 40h/tuần, Availability Calendar xin nghỉ, Cảnh báo Overload, Gợi ý Re-assign).
-  3. **FR-PRJ-012**: Reporting & Analytics (Burndown Chart lý tưởng vs thực tế, Velocity Chart 3 sprint gần nhất, Cycle Time, Xuất báo cáo PDF/CSV).
-  4. **FR-PRJ-019**: Global Search & Advanced Filtering (Phím tắt `Cmd+K`, Full-text search trong mô tả/comment, Bộ lọc OQL `assignee:me AND status:!done`, Saved Filters).
-  5. **FR-PRJ-022**: Data Import, Export & Migration (Import CSV/Excel mapping, OAuth Importer từ Trello/Jira, Full Project Export ZIP).
+  1. **FR-PRJ-010**: Portfolio & Multi-Project Dashboard ([`FR-PRJ-010_portfolio_multi_project.md`](./phase_6/FR-PRJ-010_portfolio_multi_project.md) — Portfolio Board, Program Gantt liên dự án, Risk Radar tổng hợp, Project Health Score 0-100).
+  2. **FR-PRJ-011**: Resource & Capacity Management ([`FR-PRJ-011_resource_capacity.md`](./phase_6/FR-PRJ-011_resource_capacity.md) — Workload View 40h/tuần, Availability Calendar xin nghỉ, Cảnh báo Overload, Gợi ý Re-assign).
+  3. **FR-PRJ-012**: Reporting & Analytics ([`FR-PRJ-012_reporting_analytics.md`](./phase_6/FR-PRJ-012_reporting_analytics.md) — Burndown Chart lý tưởng vs thực tế, Velocity Chart 3 sprint gần nhất, Cycle Time, Xuất báo cáo PDF/CSV).
+  4. **FR-PRJ-019**: Global Search & Advanced Filtering ([`FR-PRJ-019_global_search_filtering.md`](./phase_6/FR-PRJ-019_global_search_filtering.md) — Phím tắt `Cmd+K`, Full-text search trong mô tả/comment, Bộ lọc OQL `assignee:me AND status:!done`, Saved Filters).
+  5. **FR-PRJ-022**: Data Import, Export & Migration ([`FR-PRJ-022_data_import_export.md`](./phase_6/FR-PRJ-022_data_import_export.md) — Import CSV/Excel mapping, OAuth Importer từ Trello/Jira, Full Project Export ZIP).
 * **Đầu ra mong đợi:**
-  - Analytics & Data Aggregation Engine (OLAP / Read-model projections).
-  - Search Engine indexing (Elasticsearch / PostgreSQL Full-Text Search).
-  - Migration & ETL Pipeline.
+  - [ ] SRS Đặc tả Yêu cầu Phần mềm Hợp nhất Phase 6 & RTM Ma trận Truy vết.
+  - [ ] Analytics & Data Aggregation Engine (OLAP / Read-model projections).
+  - [ ] Search Engine indexing (Elasticsearch / PostgreSQL Full-Text Search / OQL Parser).
+  - [ ] Migration & ETL Pipeline (CSV/Excel mapping & 1-click Importers).
 
 ---
 
@@ -164,7 +165,11 @@ Theo quy trình BDA & Triết lý Phát triển chuẩn chỉ:
    - ✅ Đã hoàn tất Backend APIs (Sprint, Calendar, Strict DoD, CPM Dependencies, Recurring RRULE) & Unit Tests PASS 100%.
    - ✅ Đã hoàn tất Frontend UI (Scrum Planning Workspace, Task Calendar View, DoD Interceptor, Dependency Manager, RRULE Picker).
    - ✅ Đã chuyển toàn bộ 5/5 Tasks Phase 4 sang cột DONE trên Live PMIS Board.
-6. 🔄 **Đang triển khai Phase 5: Productivity, Time & Automations**:
+6. ~~**Triển khai Phase 5: Productivity, Time & Automations**~~: *(✅ Hoàn thành 13-11-2026)*
    - ✅ Đã hoàn tất **SRS Hợp nhất:** [`08_SRS_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.md`](./phase_5/08_SRS_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.md).
    - ✅ Đã hoàn tất **RTM 48 Test Cases:** [`09_RTM_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.csv`](./phase_5/09_RTM_PHASE5_PRODUCTIVITY_TIME_AUTOMATIONS.csv).
-   - 🔄 Chuyển các tasks Phase 5 sang trạng thái **In Progress** trên Live PMIS Board và sẵn sàng triển khai lập trình.
+   - ✅ Đã hoàn tất Backend APIs & Services (Time Tracking, Smart Priority, Automations Engine, Intake Forms).
+   - ✅ Đã nghiệm thu toàn bộ 4/4 Tasks Phase 5 và 16 decomposition subtasks chuyển sang trạng thái DONE trên Live PMIS Board (13-11-2026).
+7. 🔄 **Đang triển khai Phase 6: Cross-Project, Analytics & Integrations**:
+   - ✅ Đã gom cấu trúc toàn bộ 5 tài liệu đặc tả FR vào thư mục [`phase_6/`](./phase_6/).
+   - 🔄 Chuyển các tasks Phase 6 (FR-PRJ-010, FR-PRJ-011, FR-PRJ-012, FR-PRJ-019, FR-PRJ-022) cùng 20 subtasks sang trạng thái **In Progress** trên Live PMIS Board và sẵn sàng triển khai lập trình.

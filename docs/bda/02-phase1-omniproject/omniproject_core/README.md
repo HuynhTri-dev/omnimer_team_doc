@@ -36,28 +36,28 @@ Trước khi đọc các tài liệu bên dưới, hãy tham khảo [**00_domain
 
 ## 📊 2. Level 2: Cross-Project & Analytics (Quản trị Liên dự án & Báo cáo)
 
-### * [**FR-PRJ-010: Portfolio & Multi-Project Dashboard**](./FR-PRJ-010_portfolio_multi_project.md) — *(5 tính năng con)*
+### * [**FR-PRJ-010: Portfolio & Multi-Project Dashboard**](./phase_6/FR-PRJ-010_portfolio_multi_project.md) — *(5 tính năng con)*
   - **FR-PRJ-010.1 - Portfolio Board:** Hiển thị tất cả Projects mà user có quyền truy cập dưới dạng thẻ (Card) hoặc danh sách (List), kèm trạng thái tổng thể (On Track / At Risk / Off Track), % tiến độ và ngày deadline gần nhất.
   - **FR-PRJ-010.2 - Cross-Project Timeline (Program Gantt):** Hiển thị Gantt Chart cấp Portfolio, mỗi hàng là 1 Project, các mốc Sprint/Milestone hiển thị trên timeline chung.
   - **FR-PRJ-010.3 - Risk Radar tổng hợp:** Tổng hợp và hiển thị danh sách Tasks/Projects đang "At Risk" (quá hạn, blocked, hoặc gần deadline < 48h) trên toàn bộ portfolio.
   - **FR-PRJ-010.4 - Project Health Score:** Hệ thống tự động tính điểm sức khỏe (0–100) cho từng project dựa trên: % task đúng hạn, % task bị blocked, tốc độ hoàn thành.
   - **FR-PRJ-010.5 - Milestone Tracking:** Cho phép tạo Milestone (mốc quan trọng) gắn vào Project, hiển thị trên Program Gantt và Portfolio card.
 
-### * [**FR-PRJ-011: Resource & Capacity Management (Workload)**](./FR-PRJ-011_resource_capacity.md) — *(5 tính năng con)*
+### * [**FR-PRJ-011: Resource & Capacity Management (Workload)**](./phase_6/FR-PRJ-011_resource_capacity.md) — *(5 tính năng con)*
   - **FR-PRJ-011.1 - Workload View:** Hiển thị tổng số giờ/số Task được giao cho mỗi thành viên trong một khoảng thời gian (tuần/sprint). Cho phép so sánh với capacity tối đa đã cấu hình (VD: 40h/tuần).
   - **FR-PRJ-011.2 - Availability Calendar:** Mỗi thành viên tự đăng ký thời gian nghỉ (Leave), giảm capacity (Partial). Hệ thống trừ ngày nghỉ vào tổng capacity khi PM lên kế hoạch.
   - **FR-PRJ-011.3 - Cảnh báo Overload:** Hệ thống tự động cảnh báo (badge đỏ) khi tổng workload của thành viên vượt quá 100% capacity trong bất kỳ tuần nào.
   - **FR-PRJ-011.4 - Cross-Project Workload:** Tổng hợp workload của 1 thành viên xuyên suốt tất cả Projects họ tham gia (không chỉ 1 project).
   - **FR-PRJ-011.5 - Re-assign gợi ý:** Khi một thành viên overload, hệ thống gợi ý danh sách thành viên khác còn capacity để PM xem xét chuyển Task.
 
-### * [**FR-PRJ-012: Reporting & Analytics (Velocity, Burndown, Cycle Time)**](./FR-PRJ-012_reporting_analytics.md) — *(5 tính năng con)*
+### * [**FR-PRJ-012: Reporting & Analytics (Velocity, Burndown, Cycle Time)**](./phase_6/FR-PRJ-012_reporting_analytics.md) — *(5 tính năng con)*
   - **FR-PRJ-012.1 - Burndown Chart:** Hiển thị đồ thị số lượng Story Points (hoặc số Task) còn lại theo ngày trong Sprint. So sánh đường thực tế (Actual) với đường lý tưởng (Ideal).
   - **FR-PRJ-012.2 - Velocity Chart:** Biểu đồ cột hiển thị tổng Story Points hoàn thành (Done) qua mỗi Sprint. Tính Velocity trung bình trong 3 Sprint gần nhất (rolling average).
   - **FR-PRJ-012.3 - Cycle Time Distribution:** Biểu đồ phân phối (histogram hoặc scatter) thời gian từ khi Task vào `IN_PROGRESS` đến khi `DONE`.
   - **FR-PRJ-012.4 - Throughput Chart:** Biểu đồ số lượng Task hoàn thành mỗi ngày/tuần trong một khoảng thời gian.
   - **FR-PRJ-012.5 - Export Báo cáo:** Xuất dữ liệu báo cáo (bảng Task, log thời gian, burndown data) sang định dạng CSV hoặc PDF.
 
-### * [**FR-PRJ-019: Global Search & Advanced Filtering (Cmd+K, OQL)**](./FR-PRJ-019_global_search_filtering.md) — *(4 tính năng con)*
+### * [**FR-PRJ-019: Global Search & Advanced Filtering (Cmd+K, OQL)**](./phase_6/FR-PRJ-019_global_search_filtering.md) — *(4 tính năng con)*
   - **FR-PRJ-019.1 - Quick Search (Cmd+K):** Thanh tìm kiếm nhanh dạng pop-up ở mọi màn hình. Hỗ trợ tìm kiếm realtime (gõ tới đâu hiện tới đó).
   - **FR-PRJ-019.2 - Full-text Search:** Tìm kiếm nội dung bên trong Description, Comments, và tên file đính kèm. Hỗ trợ highlight từ khóa trùng khớp.
   - **FR-PRJ-019.3 - Advanced Filtering (OQL):** Cung cấp giao diện lọc nhiều lớp (Multi-layer filter) tại các View. Hỗ trợ Omni Query Language (OQL) dạng gõ text, VD: `assignee:me AND status:!done OR due_date:<today`.
@@ -184,7 +184,7 @@ Trước khi đọc các tài liệu bên dưới, hãy tham khảo [**00_domain
 
 ## 🔄 6. Phụ lục: Giai đoạn 2 (Phase 2)
 
-### * [**FR-PRJ-022: Data Import, Export & Migration (Trello/Jira)**](./FR-PRJ-022_data_import_export.md) — *(4 tính năng con)*
+### * [**FR-PRJ-022: Data Import, Export & Migration (Trello/Jira)**](./phase_6/FR-PRJ-022_data_import_export.md) — *(4 tính năng con)*
   - **FR-PRJ-022.1 - CSV/Excel Import:** Cho phép PM tải lên một file CSV. Cung cấp UI Mapping (Khớp cột CSV với các trường dữ liệu của Task như Tên, Assignee, Ngày đến hạn).
   - **FR-PRJ-022.2 - Trello Importer:** Nhập trực tiếp dữ liệu từ Trello Board qua API (Sử dụng OAuth để xác thực). Đảm bảo giữ nguyên các Cột (Lists), Labels, và Members nếu trùng email.
   - **FR-PRJ-022.3 - Jira Importer:** Tương tự Trello nhưng phức tạp hơn do phải map Issue Types (Epic, Story, Bug) thành cấu trúc Task/Subtask của OmniProject.
