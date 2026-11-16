@@ -6,8 +6,9 @@ Hệ thống bao gồm **24 Phân hệ Tính năng lớn** (cùng 1 tài liệu 
 
 ---
 
-## 🗺️ Lộ trình Triển khai Lập trình (Development Phases)
-> Xem chi tiết kế hoạch phân chia 6 giai đoạn phát triển từ Nền tảng tới Nâng cao tại: [**00_DEVELOPMENT_PHASES_ROADMAP.md**](./00_DEVELOPMENT_PHASES_ROADMAP.md).
+## 🗺️ Lộ trình Triển khai Lập trình & Kế hoạch Tấn công Phát hiện Lỗi (Roadmap & Attack Plan)
+> - **Lộ trình 7 giai đoạn:** Xem chi tiết lộ trình phát triển và hoàn thiện các Phase tại [**00_DEVELOPMENT_PHASES_ROADMAP.md**](./00_DEVELOPMENT_PHASES_ROADMAP.md).
+> - **Kế hoạch Tấn công Phát hiện Lỗi Toàn diện:** Xem kế hoạch chi tiết kiểm thử đa người dùng đồng thời, xung đột OCC, kiểm thử thâm nhập RBAC/IDOR, và kiểm thử 3 hộp tại [**12_SYSTEMATIC_DEFECT_DISCOVERY_ATTACK_PLAN.md**](./12_SYSTEMATIC_DEFECT_DISCOVERY_ATTACK_PLAN.md).
 
 ---
 
