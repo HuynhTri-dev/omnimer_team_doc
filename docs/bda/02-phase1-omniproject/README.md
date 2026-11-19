@@ -18,10 +18,17 @@ Nhóm tính năng quản lý dự án linh hoạt và lập lịch.
 - [FR-PRJ-009: Scrum & Sprint Management](./omniproject_core/FR-PRJ-009_scrum_sprint_management.md)
 
 ### 2. [OmniChannel](./omnichannel/)
-Cổng giao tiếp hợp nhất, kết nối với Zalo/Telegram.
-- [FR-CHN-001: Unified Inbox Gateway](./omnichannel/FR-CHN-001_unified_inbox_gateway.md)
-- [FR-CHN-002: 1-Click Message-to-Task](./omnichannel/FR-CHN-002_1_click_message_to_task.md)
-- [Biểu đồ Trình tự (Sequence Diagram) - Luồng bất đồng bộ](./omnichannel/diagram_omnichannel_sequence.md)
+Cổng giao tiếp 2 chiều hợp nhất (Telegram, Slack, Zalo OA), BYOS Storage & AI ChatOps Read-only.
+- [**00_DEVELOPMENT_PHASES_ROADMAP.md (Lộ trình 6 Giai đoạn)**](./omnichannel/00_DEVELOPMENT_PHASES_ROADMAP.md)
+- [README OmniChannel (Danh mục 6 Phase & 17 FRs)](./omnichannel/README.md)
+- [BRD & User Stories (15 US + Risk Register)](./omnichannel/BRD_OMNICHANNEL_USER_STORIES.md)
+- [Phase 1: Storage Foundation (BYOS) & Telegram Gateway (`FR-CHN-001, 002, 017.1`)](./omnichannel/phase_1/)
+- [Phase 2: Unified 2-Way Inbox, Triage OCC & Internal Note (`FR-CHN-003..005`)](./omnichannel/phase_2/)
+- [Phase 3: Message-to-Task, OPAgent Draft & Project Archival (`FR-CHN-006..008, 017.2..4`)](./omnichannel/phase_3/)
+- [Phase 4: Slack/Zalo 48h, Auto-Notify & In-Chat Mention (`FR-CHN-009..011`)](./omnichannel/phase_4/)
+- [Phase 5: Account Binding & Internal AI ChatOps 2A (`FR-CHN-012..014`)](./omnichannel/phase_5/)
+- [Phase 6: External Client AI ChatOps 2B & NĐ 13 Compliance (`FR-CHN-015..016`)](./omnichannel/phase_6/)
+- [Biểu đồ Trình tự Tổng quan (Sequence Diagrams)](./omnichannel/diagram_omnichannel_sequence.md)
 
 ### 3. [Agent Project (OPAgent)](./agent_project/)
 Trợ lý AI bóc tách thông tin và cảnh báo rủi ro.
