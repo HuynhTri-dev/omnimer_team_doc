@@ -17,7 +17,7 @@ Tài liệu SRS này đặc tả toàn bộ yêu cầu chức năng, quy tắc n
 Phase 1 thiết lập tầng nền móng lưu trữ và cổng tiếp nhận sự kiện bất đồng bộ:
 1. **`FR-CHN-017.1` (Pluggable Tenant Storage Adapter — `MANAGED` & `BYOS`):** Cho phép `Workspace Admin` giữ mặc định `MANAGED` hoặc tự cắm hạ tầng lưu trữ riêng (`AWS_S3`, `MINIO`, `GCS_S3`, `CLOUDFLARE_R2`), thực thi Preflight Test (`PutObject → GetObject → DeleteObject`), mã hóa credentials AES-256-GCM, lưu trữ tệp vật lý chống trùng theo khóa băm `{workspace_id}/blobs/{sha256}` kèm `ref_count` và bộ đệm Staging 24h khi BYOS tạm lỗi.
 2. **`FR-CHN-001` (Channel Connection Management & Token Security):** Quản lý vòng đời kết nối kênh (`TELEGRAM`, `SLACK`, `ZALO_OA` — ưu tiên chứng minh Core Gateway bằng **Telegram Bot** ở Phase 1; cấm tuyệt đối Zalo cá nhân / unofficial API), mã hóa `encrypted_credentials`, sinh `webhook_secret_hash`, Health Check / Rotate Token và ghi `chatops_audit_logs`.
-3. **`FR-CHN-002` (Inbound Webhook Gateway, Idempotency & DLQ):** Tiếp nhận Webhook, xác thực chữ ký HMAC/Secret (`HTTP 401/403`), chống trùng đa khách thuê bằng khóa tổ hợp `SHA256(workspace_id:channel_type:external_message_id:event_action)` trên Redis (TTL 24h), chuẩn hóa payload, trả `HTTP 200 OK` trong `< 100ms`, tách lưu `messages.content` (Text) trước khi tải Media异步 (`p95 < 3s`), và Retry 3 lần (`5s, 30s, 120s`) trước khi đẩy vào Dead-Letter Queue (`webhook_dead_letters`).
+3. **`FR-CHN-002` (Inbound Webhook Gateway, Idempotency & DLQ):** Tiếp nhận Webhook, xác thực chữ ký HMAC/Secret (`HTTP 401/403`), chống trùng đa khách thuê bằng khóa tổ hợp Hybrid `omni:idemp:${workspace_id}:${channel_type}:${sha256(external_message_id:event_action)}` trên Redis (TTL 24h), chuẩn hóa payload, trả `HTTP 200 OK` trong `< 100ms`, tách lưu `messages.content` (Text) trước khi tải Media bất đồng bộ (`p95 < 3s`), và Retry 3 lần (`5s, 30s, 120s`) trước khi đẩy vào Dead-Letter Queue (`webhook_dead_letters`).
 
 ### 1.3 References
 - [FR-CHN-001: Channel Connection Management](./FR-CHN-001_channel_connection_management.md)
@@ -54,9 +54,9 @@ sequenceDiagram
     API->>KMS: Mã hóa Bot Token & Webhook Secret
     API->>DB: INSERT channel_connections (ACTIVE) + Audit Log
 
-    Ext->>GW: POST /api/v1/webhooks/omnichannel/telegram/:connectionId
+    Ext->>GW: POST /api/v1/omnichannel/webhooks/telegram/:workspaceId/:connectionId
     GW->>KMS: Verify X-Telegram-Bot-Api-Secret-Token
-    GW->>Redis: SETNX idem:{sha256(ws:channel:msgId:action)} EX 86400
+    GW->>Redis: SETNX omni:idemp:ws:channel:sha256(msgId:action) EX 86400
     GW-->>Ext: HTTP 200 OK (p95 < 100ms)
     GW->>Worker: Enqueue NormalizedInboundEvent
     Worker->>DB: Transaction: Upsert Conversation + Insert Message (Text First)
@@ -133,7 +133,7 @@ sequenceDiagram
 | `GET` | `/api/v1/omnichannel/connections` | `ADMIN`, `PM` | N/A | `200 OK` |
 | `POST` | `/api/v1/omnichannel/connections/:id/rotate` | `ADMIN`, `PM` | `RotateTokenSchema` | `200 OK` / `404`, `422` |
 | `PATCH` | `/api/v1/omnichannel/connections/:id/disconnect` | `ADMIN`, `PM` | N/A | `200 OK` (Non-destructive) |
-| `POST` | `/api/v1/webhooks/omnichannel/:channel/:connectionId` | Public (Signed) | Raw Provider JSON | `200 OK` (`<100ms`) / `401`, `403` |
+| `POST` | `/api/v1/omnichannel/webhooks/:channelType/:workspaceId/:connectionId` | Public (Signed) | Raw Provider JSON | `200 OK` (`<100ms`) / `401`, `403` |
 
 ---
 
