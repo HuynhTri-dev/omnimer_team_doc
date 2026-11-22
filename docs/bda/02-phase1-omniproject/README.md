@@ -36,5 +36,13 @@ Trợ lý AI bóc tách thông tin và cảnh báo rủi ro.
 - [FR-AGT-002: Proactive Health Monitor](./agent_project/FR-AGT-002_proactive_health_monitor.md)
 
 ### 4. [Asset Governance](./asset_governance/)
-Quản trị tri thức và lưu trữ tài liệu dự án tự động.
-- [FR-DOC-001: Automated Asset Governance](./asset_governance/FR-DOC-001_automated_asset_governance.md)
+Quản trị tri thức, chuẩn hóa hồ sơ lập kế hoạch (`Test Plan`, `Pentest Plan`, v.v. dưới dạng Excel `.xlsx` & Markdown `.md`), ma trận phân quyền đa tầng, quy trình nghiệm thu bàn giao đa chiều và đóng gói chuyển giao dự án.
+- **[01_SRS_ASSET_GOVERNANCE_AND_PLANNING_HANDOVER.md](./asset_governance/01_SRS_ASSET_GOVERNANCE_AND_PLANNING_HANDOVER.md)** — *(Đặc tả Kỹ thuật IEEE 830 & Ma trận Xác thực/Phân quyền đa tầng)*
+- **[02_RTM_ASSET_GOVERNANCE_AND_PLANNING_HANDOVER.csv](./asset_governance/02_RTM_ASSET_GOVERNANCE_AND_PLANNING_HANDOVER.csv)** — *(Ma trận Truy vết Yêu cầu & Kiểm thử RBAC/Handover)*
+- **[FR-DOC-001: Automated Asset Governance & Structured Planning Handover](./asset_governance/FR-DOC-001_automated_asset_governance.md)** — *(6 tính năng con)*
+  - `FR-DOC-001.1`: Auto-Tagging & Multi-Source Asset Ingestion (Task DoD + OmniChannel Archive + Direct Upload)
+  - `FR-DOC-001.2`: 7 Structured Planning Blueprints & Anti-Vibe Schema Validation (`TEST_PLAN`, `PENTEST_PLAN`, `ARCH_TECHNICAL_PLAN`, `RELEASE_HANDOVER_PLAN`, `SPRINT_ITERATION_PLAN`, `MIGRATION_PLAN`, `INCIDENT_RESPONSE_PLAN`)
+  - `FR-DOC-001.3`: Flexible Task-Level Designated Reviewer & 4-Stage Handover Sign-off Workflow (`SHA-256` Immutable Versioning & Dependency Gate)
+  - `FR-DOC-001.4`: Plan-to-Execution & Remediation Traceability (Finding → Task khắc phục & Chặn Release khi còn Critical)
+  - `FR-DOC-001.5`: Multi-Dimensional Search & 3-Tier Security Classification (`INTERNAL`, `CONFIDENTIAL`, `RESTRICTED_SECURITY`)
+  - `FR-DOC-001.6`: Smart Handover & Onboarding Bundle Exporter (RBAC Redaction + `00_HANDOVER_MANIFEST.md` + ZIP/TTL Link)

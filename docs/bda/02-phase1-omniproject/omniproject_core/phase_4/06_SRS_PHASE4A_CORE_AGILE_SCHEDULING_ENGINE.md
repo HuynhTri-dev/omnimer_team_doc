@@ -32,7 +32,7 @@ Phase 4 nâng cấp hệ thống OmniMer từ một nền tảng quản lý lu�
 | :--- | :--- | :--- | :--- |
 | **Scrum & Sprint Engine** | `FR-PRJ-009` | [`FR-PRJ-009_scrum_sprint_management.md`](./FR-PRJ-009_scrum_sprint_management.md) | Bảng `sprints`, quan hệ `tasks.sprint_id`, Khóa duy nhất 1 Active Sprint (`BL-PRJ-009.1`), Rollover việc dở dang nguyên tử (`BL-PRJ-009.4`), Sprint Planning Workspace 3 phân vùng kéo thả. |
 | **Interactive Calendar View** | `FR-PRJ-016` | [`FR-PRJ-016_calendar_view.md`](./FR-PRJ-016_calendar_view.md) | Góc nhìn thứ 5 trên View Switcher: Chế độ Month/Week/Day, Kéo thả event chip cập nhật `due_date`, Quick-add task khi click ô trống, Cột phụ Unscheduled Tasks, Time-window query. |
-| **Strict Definition of Done** | `FR-PRJ-008` | [`FR-PRJ-008_strict_dod_output.md`](./FR-PRJ-008_strict_dod_output.md) | Cổng khóa chuyển trạng thái sang `DONE`: Bắt buộc nộp File/Figma/PR khi `output_contract_type != NONE`, ném lỗi `HTTP 403 Forbidden` (`BL-PRJ-008.2`). Ngoại lệ tự động cho Personal Space (`BL-PRJ-008.4`). |
+| **Strict Definition of Done** | `FR-PRJ-008` | [`FR-PRJ-008_strict_dod_output.md`](./FR-PRJ-008_strict_dod_output.md) | Cổng khóa chuyển trạng thái sang `DONE`: Bắt buộc nộp File/Figma/PR hoặc **`STRUCTURED_PLAN` (`.xlsx`/`.md`)** khi `output_contract_type != NONE`, ném lỗi `HTTP 403 Forbidden` (`BL-PRJ-008.2`). Tích hợp **Cấu hình Reviewer linh hoạt & Cổng Nghiệm thu (`BL-PRJ-008.5`)** đồng bộ với [`FR-DOC-001`](../../asset_governance/FR-DOC-001_automated_asset_governance.md). Ngoại lệ tự động cho Personal Space (`BL-PRJ-008.4`). |
 | **Dependency & Critical Path (CPM)** | `FR-PRJ-003` | [`FR-PRJ-003_dependency_critical_path.md`](./FR-PRJ-003_dependency_critical_path.md) | Bảng `task_dependencies`, 4 kiểu nối (FS/SS/FF/SF), Cycle Detection ngăn chặn vòng lặp $A \to B \to C \to A$ (`EC-02`), Auto-scheduling lan truyền tiến độ (`BL-PRJ-003.1`), Thuật toán CPM tính Forward/Backward pass xác định `Total Float = 0` (`BL-PRJ-003.2`). |
 | **Recurring Tasks Engine** | `FR-PRJ-017` | [`FR-PRJ-017_recurring_tasks.md`](./FR-PRJ-017_recurring_tasks.md) | Cấu hình lặp RFC 5545 iCalendar (`recurrence_rule`), Tự động nhân bản instance tiếp theo khi Done (`BL-PRJ-017.2`), Quản lý chuỗi Series Scope (`BL-PRJ-017.3`), Biểu tượng nhận diện 🔄 trên mọi view. |
 
@@ -122,6 +122,25 @@ enum OutputContractType {
   URL_LINK
   FILE_UPLOAD
   MERGE_REQUEST
+  STRUCTURED_PLAN // Mở rộng cho Planning Handover (FR-DOC-001 v2.1)
+}
+
+// Enum 7 loại Plan chuẩn cho STRUCTURED_PLAN (FR-DOC-001.2)
+enum PlanBlueprintType {
+  TEST_PLAN
+  PENTEST_PLAN
+  ARCH_TECHNICAL_PLAN
+  RELEASE_HANDOVER_PLAN
+  SPRINT_ITERATION_PLAN
+  MIGRATION_PLAN
+  INCIDENT_RESPONSE_PLAN
+}
+
+// Enum chính sách chốt nghiệm thu bàn giao trên Task (FR-PRJ-008 + FR-DOC-001.3)
+enum HandoverApprovalPolicy {
+  NONE
+  ANY_ONE
+  ALL_REQUIRED
 }
 
 // Enum loại liên kết phụ thuộc giữa 2 nhiệm vụ (FR-PRJ-003)
@@ -183,9 +202,12 @@ model Task {
   sprintId              String?            @map("sprint_id") @db.Uuid
   sprint                Sprint?            @relation(fields: [sprintId], references: [id], onDelete: SetNull)
 
-  // 2. Phân hệ Strict Definition of Done (FR-PRJ-008)
-  outputContractType    OutputContractType @default(NONE) @map("output_contract_type")
-  outputDeliverable     Json?              @map("output_deliverable")
+  // 2. Phân hệ Strict Definition of Done & Handover Reviewer (FR-PRJ-008)
+  outputContractType     OutputContractType     @default(NONE) @map("output_contract_type")
+  requiredPlanType       PlanBlueprintType?     @map("required_plan_type")
+  designatedReviewerIds  String[]               @default([]) @map("designated_reviewer_ids") @db.Uuid
+  handoverApprovalPolicy HandoverApprovalPolicy @default(NONE) @map("handover_approval_policy")
+  outputDeliverable      Json?                  @map("output_deliverable")
 
   // 3. Phân hệ Recurring Tasks (FR-PRJ-017)
   recurrenceRule        String?            @map("recurrence_rule") @db.VarChar(500)
@@ -238,16 +260,24 @@ model Task {
 
 ---
 
-### Phân Hệ 3: `FR-PRJ-008` — Cổng Tiêu Chuẩn Nghiệm Thu Nghiêm Ngặt (Strict DoD Gate)
+### Phân Hệ 3: `FR-PRJ-008` — Cổng Tiêu Chuẩn Nghiệm Thu Nghiêm Ngặt (Strict DoD Gate & Handover Sign-off)
 
 #### Các Quy Tắc Nghiệp Vụ:
-* **`BL-PRJ-008.1` (Thiết Lập Khế Ước Đầu Ra):** Gán `outputContractType` (`NONE`, `URL_LINK`, `FILE_UPLOAD`, `MERGE_REQUEST`).
+* **`BL-PRJ-008.1` (Thiết Lập Khế Ước Đầu Ra):** Gán `outputContractType` (`NONE`, `URL_LINK`, `FILE_UPLOAD`, `MERGE_REQUEST`, `STRUCTURED_PLAN`) kèm `requiredPlanType`, `designatedReviewerIds[]`, và `handoverApprovalPolicy` (`NONE | ANY_ONE | ALL_REQUIRED`).
 * **`BL-PRJ-008.2` (Khóa Chuyển Trạng Thái Done Blocker):** Khi chuyển task sang bất kỳ trạng thái nào có `category = DONE`:
   - Nếu `outputContractType != NONE` VÀ `outputDeliverable == null`:
     $\rightarrow$ Backend từ chối và ném lỗi `HTTP 403 Forbidden` (`DOD_DELIVERABLE_REQUIRED`).
     $\rightarrow$ Frontend chặn thao tác kéo thả, nảy thẻ về cột cũ và bật Modal **"Nộp hiện vật bàn giao (Definition of Done)"**.
-* **`BL-PRJ-008.3` (Đồng Bộ Kho Tri Thức):** Phát sự kiện `TASK_DOD_COMPLETED` qua Redis Pub/Sub để phục vụ lưu trữ tài liệu dài hạn.
+  - Nếu `outputContractType == STRUCTURED_PLAN`: Chạy `ExcelPlanParserService` / `PlanSchemaValidator` kiểm tra file `.xlsx` hoặc `.md` theo `requiredPlanType` (`FR-DOC-001.2`); nếu thiếu Sheet/Cột hoặc trường bắt buộc $\rightarrow$ `HTTP 422` (`EXCEL_TEMPLATE_INVALID` / `PLAN_SCHEMA_INCOMPLETE`).
+* **`BL-PRJ-008.3` (Đồng Bộ Kho Tri Thức):** Phát sự kiện `TASK_DOD_COMPLETED` qua Redis Pub/Sub để phục vụ lưu trữ tài liệu dài hạn sang [`FR-DOC-001`](../../asset_governance/FR-DOC-001_automated_asset_governance.md).
 * **`BL-PRJ-008.4` (Ngoại Lệ Không Gian Cá Nhân):** Task thuộc Personal Space (`is_personal = true`) luôn có `outputContractType = NONE` và tự động bỏ qua kiểm tra DoD.
+* **`BL-PRJ-008.5` (Cổng Nghiệm Thu Bàn Giao Đa Người Duyệt — Kế thừa `FR-DOC-001.3`):** Khi `outputContractType == STRUCTURED_PLAN` hoặc có `designatedReviewerIds.length > 0`, việc nộp Deliverable hợp lệ sẽ đưa Task vào Meta-Status `IN_REVIEW` (chờ Sign-off); mọi thao tác kéo thẳng sang `DONE` trước khi Asset đạt `APPROVED_BASELINE` bị chặn `HTTP 403 Forbidden` (`HANDOVER_SIGNOFF_REQUIRED`).
+
+#### Ma Trận Phân Quyền Cổng DoD Phase 4 (Kế thừa `FR-PRJ-000` & Chi tiết tại `01_SRS_ASSET_GOVERNANCE`):
+* **Admin / PM / Task Owner:** Toàn quyền cấu hình `outputContractType`, `requiredPlanType`, `designatedReviewerIds[]`, `handoverApprovalPolicy`.
+* **Task Assignee (Author):** Chỉ được nộp/nộp lại Deliverable cho Task của mình; bị **cấm tự hạ chuẩn DoD** và **cấm tự ký duyệt (`403 SELF_APPROVAL_PROHIBITED`)**.
+* **Designated Reviewer:** Chỉ các User nằm trong `designatedReviewerIds[]` mới được quyền gọi API ký `APPROVED` / `CHANGES_REQUESTED` (`FR-DOC-001.3`).
+* **Other Member / Guest:** Không có quyền cấu hình DoD hoặc ký nghiệm thu (`403 Forbidden`). *(Xem ma trận đầy đủ 16 hành động × 6 vai trò và 3 tầng độ mật tại [`01_SRS_ASSET_GOVERNANCE_AND_PLANNING_HANDOVER.md`](../../asset_governance/01_SRS_ASSET_GOVERNANCE_AND_PLANNING_HANDOVER.md#3-ma-trận-xác-thực--phân-quyền-đa-tầng-multi-layer-authentication--authorization-matrix)).*
 
 ---
 
@@ -329,7 +359,7 @@ flowchart TD
 
 ## 4. Đặc Tả Giao Diện Lập Trình Toàn Diện (REST API Contracts Cho Cả 5 Phân Hệ)
 
-### 4.1 Bảng Tổng Hợp 12 Endpoints Thuộc Phase 4
+### 4.1 Bảng Tổng Hợp 13 Endpoints Thuộc Phase 4
 
 | Phân Hệ | Method | Endpoint Path | Quyền Hạn | Mô Tả Tóm Tắt |
 | :--- | :---: | :--- | :---: | :--- |
@@ -340,7 +370,8 @@ flowchart TD
 | **Scrum** | `PATCH` | `/api/v1/tasks/:taskId/assign-sprint` | Member, PM | Kéo thả gán task vào Sprint hoặc Backlog |
 | **Calendar**| `GET` | `/api/v1/projects/:projectId/calendar` | Mọi vai trò | Lấy danh sách task theo khoảng ngày (Time-window) |
 | **Calendar**| `PATCH` | `/api/v1/tasks/:taskId/reschedule` | Member, PM | Kéo dời `dueDate` / `startDate` trên lưới lịch |
-| **DoD** | `POST` | `/api/v1/tasks/:taskId/deliverables` | Member, PM | Nộp hiện vật bàn giao (Link Figma, Git PR, File) |
+| **DoD** | `PATCH` | `/api/v1/tasks/:taskId/output-contract` | PM, Admin, Owner | Cấu hình `outputContractType`, `requiredPlanType`, `designatedReviewerIds[]`, `handoverApprovalPolicy` |
+| **DoD** | `POST` | `/api/v1/tasks/:taskId/deliverables` | Assignee, PM, Admin | Nộp hiện vật bàn giao (Link Figma, Git PR, File hoặc `STRUCTURED_PLAN` `.xlsx`/`.md` đồng bộ `FR-DOC-001`) |
 | **Dependency**| `POST` | `/api/v1/projects/:projectId/dependencies` | Member, PM | Thiết lập liên kết FS/SS/FF/SF kèm Cycle Check |
 | **Dependency**| `GET` | `/api/v1/projects/:projectId/dependencies` | Mọi vai trò | Lấy danh sách liên kết & chuỗi găng Critical Path |
 | **Dependency**| `DELETE`| `/api/v1/projects/:projectId/dependencies/:id`| Member, PM | Xóa liên kết phụ thuộc |
