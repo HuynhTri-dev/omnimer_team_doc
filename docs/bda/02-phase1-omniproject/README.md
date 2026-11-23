@@ -31,9 +31,16 @@ Cổng giao tiếp 2 chiều hợp nhất (Telegram, Slack, Zalo OA), BYOS Stora
 - [Biểu đồ Trình tự Tổng quan (Sequence Diagrams)](./omnichannel/diagram_omnichannel_sequence.md)
 
 ### 3. [Agent Project (OPAgent)](./agent_project/)
-Trợ lý AI bóc tách thông tin và cảnh báo rủi ro.
-- [FR-AGT-001: NLP Text/Voice-to-Task](./agent_project/FR-AGT-001_nlp_text_to_task.md)
-- [FR-AGT-002: Proactive Health Monitor](./agent_project/FR-AGT-002_proactive_health_monitor.md)
+Hệ sinh thái Multi-Agent AI (`OPAgent Service` Python/LangGraph + `Coarse-Grained Tool Facade` TypeScript) phục vụ tự động hóa CSKH, quản trị dự án, điều phối nguồn lực, khởi tạo cấu hình và giám sát tuân thủ tài sản.
+- [**README Agent Project (Tổng quan Hệ sinh thái & Ma trận Truy vết)**](./agent_project/README.md)
+- [**sa.md (Solution Architecture — LangGraph & Coarse-Grained MCP Tools)**](./agent_project/sa.md)
+- [FR-AGT-001: NLP Text/Voice-to-Task & HITL Draft](./agent_project/FR-AGT-001_nlp_text_to_task.md)
+- [FR-AGT-002: Proactive Health Monitor (SQL 4h Risk & 18:00 Standup)](./agent_project/FR-AGT-002_proactive_health_monitor.md)
+- [FR-AGT-003: Omnichannel Ticket Bot & Support Copilot](./agent_project/FR-AGT-003_omnichannel_ticket_bot.md)
+- [FR-AGT-004: PM Bot & Full Task Lifecycle Copilot](./agent_project/FR-AGT-004_pm_copilot_full_task_lifecycle.md)
+- [FR-AGT-005: Project Architect & Account Onboarding Agent](./agent_project/FR-AGT-005_project_setup_and_account_onboarding_agent.md)
+- [FR-AGT-006: Smart Developer Dispatcher (Skill & Capacity Routing)](./agent_project/FR-AGT-006_smart_developer_dispatcher.md)
+- [FR-AGT-007: Asset Governance & Remediation Guardian Agent](./agent_project/FR-AGT-007_asset_governance_and_remediation_agent.md)
 
 ### 4. [Asset Governance](./asset_governance/)
 Quản trị tri thức, chuẩn hóa hồ sơ lập kế hoạch (`Test Plan`, `Pentest Plan`, v.v. dưới dạng Excel `.xlsx` & Markdown `.md`), ma trận phân quyền đa tầng, quy trình nghiệm thu bàn giao đa chiều và đóng gói chuyển giao dự án.

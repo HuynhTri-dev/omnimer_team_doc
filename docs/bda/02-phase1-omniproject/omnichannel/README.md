@@ -4,7 +4,8 @@ Thư mục này chứa bộ tài liệu nghiệp vụ (**BRD & User Stories**), 
 
 ## Tài liệu Tổng quan & Kế hoạch Kỹ thuật
 - [**00_DEVELOPMENT_PHASES_ROADMAP.md**](./00_DEVELOPMENT_PHASES_ROADMAP.md) — Đồ thị phụ thuộc (DAG) & Work Breakdown Structure 6 Phase.
-- [**07_omnichannel_implementation_changelog.md**](../../../../../../backend_otm/project_core/docs/change_log/07_omnichannel_implementation_changelog.md) — Kế hoạch triển khai kỹ thuật (19 Prisma Models, 6 Repositories, 5 Zod DTOs, Triad Lifecycle) & Phân công 5 AI Models (`Claude Opus`, `Gemini 4 Hydrogen`, `Neon`, `Gemini 4 Argon`, `Gemini Flash`).
+- [**07_omnichannel_implementation_changelog.md**](../../../../../backend_otm/project_core/docs/change_log/07_omnichannel_implementation_changelog.md) — Kế hoạch triển khai kỹ thuật (19 Prisma Models, 6 Repositories, 5 Zod DTOs, Triad Lifecycle) & Phân công 5 AI Models (`Claude Opus`, `Gemini 4 Hydrogen`, `Neon`, `Gemini 4 Argon`, `Gemini Flash`).
+- [**07b_omnichannel_sticky_portfolio_and_sla_enhancement_changelog.md**](../../../../../backend_otm/project_core/docs/change_log/07b_omnichannel_sticky_portfolio_and_sla_enhancement_changelog.md) — Kế hoạch nâng cấp Phase 7.5: Multi-Channel Sticky Customer Portfolio (`FR-CHN-004.6` trên Telegram/Slack/Zalo OA), Cô lập quyền xem `STRICT_ASSIGNED_ONLY`, Bàn giao tệp khách khi CSKH nghỉ phép/nghỉ việc (`TC-P2-012..014`) & Cảnh báo SLA 48h.
 - [BRD_OMNICHANNEL_USER_STORIES.md](./BRD_OMNICHANNEL_USER_STORIES.md) — Vision & Scope, Business Rules (`BR-CHN-001`..`009`), NFRs, 15 User Stories (`US-CHN-01`..`15`) và Risk Register.
 - [diagram_omnichannel_sequence.md](./diagram_omnichannel_sequence.md) — Biểu đồ trình tự tổng quan xuyên suốt 4 luồng chính.
 
