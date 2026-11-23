@@ -11,6 +11,9 @@
 > **Solution Architecture:** [sa.md](./sa.md)  
 > **RTM:** [02_RTM_OPAGENT_MULTI_AGENT_ECOSYSTEM.csv](./02_RTM_OPAGENT_MULTI_AGENT_ECOSYSTEM.csv)
 
+> [!NOTE]
+> **Cập nhật kiến trúc (2026-11-23):** Một số quyết định kỹ thuật tại §2, §3.2, §4 và `NFR-AGT-02` đã được cập nhật theo [`02_opagent_technology_evaluation_adr.md`](../../../../../backend_otm/opagent_service/docs/architecture/02_opagent_technology_evaluation_adr.md) (`pgvector` thay Qdrant, ADT `EdDSA` thay header tĩnh, HTTP/1.1 Keep-Alive + SSE thay HTTP/2, Postgres `opagent_runtime` checkpointer thay Redis `pm_ctx`, và 20 Agent Tools `READ`/`STAGE`). Bản SRS này sẽ được đồng bộ chi tiết ở Bước 11.
+
 ---
 
 ## 1. Introduction

@@ -2,6 +2,9 @@
 
 **Hệ thống AI Agent (OPAgent) — Mô hình Python (LangGraph) & TypeScript Coarse-Grained Tools**
 
+> [!NOTE]
+> **Cập nhật kiến trúc (2026-11-23):** Một số quyết định hạ tầng và giao thức trong tài liệu gốc này đã được điều chỉnh qua bộ ADR tại [`02_opagent_technology_evaluation_adr.md`](../../../../../backend_otm/opagent_service/docs/architecture/02_opagent_technology_evaluation_adr.md): thay Qdrant bằng `pgvector` trong PostgreSQL Core, thay static header bằng Agent Delegation Token (`EdDSA`), dùng HTTP/1.1 Keep-Alive + SSE thay HTTP/2, và Core trực tiếp gửi thông báo Telegram. Phần thân tài liệu dưới đây sẽ được đồng bộ chi tiết ở Bước 11 của changelog.
+
 ---
 
 ## 1. Tổng quan & Nguyên tắc Thiết kế
