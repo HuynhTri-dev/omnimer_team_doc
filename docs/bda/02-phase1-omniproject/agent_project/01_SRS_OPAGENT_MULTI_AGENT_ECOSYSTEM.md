@@ -12,8 +12,8 @@
 > **RTM:** [02_RTM_OPAGENT_MULTI_AGENT_ECOSYSTEM.csv](./02_RTM_OPAGENT_MULTI_AGENT_ECOSYSTEM.csv) (32 Functional + 16 Security Test Cases)
 
 > [!NOTE]
-> **Trạng thái tài liệu:** `v2.0.0` (Đã đồng bộ toàn diện với bộ 3 tài liệu kiến trúc kỹ thuật tại `backend_otm/opagent_service/docs/architecture/` và Changelog `v2.0.0`).
-> *Các cập nhật chính:* `pgvector (vector(1024))` thay cho Qdrant; Agent Delegation Token (`EdDSA Ed25519`) thay cho static headers; giao tiếp HTTP/1.1 Keep-Alive + SSE thay cho HTTP/2; PostgreSQL schema `opagent_runtime` checkpointer thay cho Redis `pm_ctx`; rút quyền commit của LLM (chỉ giữ 20 tools `READ`/`STAGE`); bổ sung bảng `approved_auto_reply_templates` cho phản hồi ngoài giờ tất định; và chiến lược model serving Google AI Studio (1500 RPD) $\rightarrow$ OpenRouter $\rightarrow$ AWS Bedrock.
+> **Trạng thái tài liệu:** `v2.0.0` (Đã đồng bộ toàn diện với bộ 5 tài liệu kiến trúc kỹ thuật tại `backend_otm/opagent_service/docs/architecture/` và Changelog `v2.0.0`).
+> *Các cập nhật chính:* `pgvector (vector(1024))` thay cho Qdrant; Agent Delegation Token (`EdDSA Ed25519`) thay cho static headers; giao tiếp HTTP/1.1 Keep-Alive + SSE thay cho HTTP/2; PostgreSQL schema `opagent_runtime` checkpointer thay cho Redis `pm_ctx`; rút quyền commit của LLM (chỉ giữ 20 tools `READ`/`STAGE`); bổ sung bảng `approved_auto_reply_templates` cho phản hồi ngoài giờ tất định; bộ nhớ ngắn hạn 2 kênh (`WorkingState` vs `History`), `User/Workspace AgentPreferences` JSONB, khóa đồng thời `thread_id`, `HITL Edit-Diff Telemetry`, `PromptRegistry` và chiến lược model serving đa tầng.
 
 ---
 
@@ -46,6 +46,10 @@ Toàn bộ lộ trình triển khai gồm **Giai đoạn 0 và 3 Giai đoạn T�
 - [01_opagent_source_architecture.md](file:///Users/macbookair/Downloads/source/omnimer_team/backend_otm/opagent_service/docs/architecture/01_opagent_source_architecture.md) — Cấu trúc mã nguồn & phân tách Event / State
 - [02_opagent_technology_evaluation_adr.md](file:///Users/macbookair/Downloads/source/omnimer_team/backend_otm/opagent_service/docs/architecture/02_opagent_technology_evaluation_adr.md) — Bộ quyết định kiến trúc ADR-OPA-001..007
 - [03_opagent_security_authorization_architecture.md](file:///Users/macbookair/Downloads/source/omnimer_team/backend_otm/opagent_service/docs/architecture/03_opagent_security_authorization_architecture.md) — Kiến trúc An toàn Thông tin, RBAC Matrix & 16 Red-Team Tests
+- [04_opagent_memory_context_management_architecture.md](file:///Users/macbookair/Downloads/source/omnimer_team/backend_otm/opagent_service/docs/architecture/04_opagent_memory_context_management_architecture.md) — Kiến trúc Bộ nhớ (`WorkingState`), Pre-Model Compaction, Progressive Disclosure & Payload Offloading
+- [05_opagent_reliability_eval_and_ops_architecture.md](file:///Users/macbookair/Downloads/source/omnimer_team/backend_otm/opagent_service/docs/architecture/05_opagent_reliability_eval_and_ops_architecture.md) — Khóa đồng thời `thread_id`, Self-Repair, HITL Edit-Diff Telemetry, Prompt Versioning & AI Eval Harness
+- [06_opagent_admin_observability_and_trace_monitor_architecture.md](file:///Users/macbookair/Downloads/source/omnimer_team/backend_otm/opagent_service/docs/architecture/06_opagent_admin_observability_and_trace_monitor_architecture.md) — Hệ thống Admin Agent Monitor, Bảng tính Context Window, Waterfall Trace Inspector & Chẩn đoán điểm gãy 7 tầng
+- [07_opagent_multimodal_io_and_ui_interaction_architecture.md](file:///Users/macbookair/Downloads/source/omnimer_team/backend_otm/opagent_service/docs/architecture/07_opagent_multimodal_io_and_ui_interaction_architecture.md) — Đặc tả 6 loại Đầu vào Đa phương thức (`Text`, `Voice`, `Image`, `Doc`, `XLSX`, `Omnichannel`) & 6 nhóm Đầu ra Giao diện HITL / Deep-Links
 - [FR-AGT-001](./FR-AGT-001_nlp_text_to_task.md) | [FR-AGT-002](./FR-AGT-002_proactive_health_monitor.md) | [FR-AGT-003](./FR-AGT-003_omnichannel_ticket_bot.md) | [FR-AGT-004](./FR-AGT-004_pm_copilot_full_task_lifecycle.md) | [FR-AGT-005](./FR-AGT-005_project_setup_and_account_onboarding_agent.md) | [FR-AGT-006](./FR-AGT-006_smart_developer_dispatcher.md) | [FR-AGT-007](./FR-AGT-007_asset_governance_and_remediation_agent.md)
 - [02_RTM_OPAGENT_MULTI_AGENT_ECOSYSTEM.csv](./02_RTM_OPAGENT_MULTI_AGENT_ECOSYSTEM.csv) — Ma trận Truy xuất Yêu cầu & Test Cases
 
@@ -108,19 +112,21 @@ flowchart TB
 
 | Table / Prisma Model | Key Columns & Types | Purpose & Invariants |
 | :--- | :--- | :--- |
-| **`draft_tasks`** (`DraftTask`) | `id` (UUID), `workspace_id`, `project_id`, `conversation_id` (`String?` — nullable), `input_mode` (`TEXT \| VOICE \| OMNICHANNEL_MSG \| SECURITY_FINDING`), `raw_input_text`, `task_title`, `description` (giữ nguyên PII gốc trên Server), `assignee_candidates` (`JSONB`), `suggested_deadline` (`TIMESTAMPTZ`), `extracted_subtasks` (`JSONB`), `ai_status` (`DRAFT_READY \| FALLBACK_MANUAL \| CONFIRMED \| DISCARDED`), `created_by`, `created_at`. | Lưu bản nháp bóc tách từ `FR-AGT-001`, `FR-AGT-003.3`, `FR-AGT-007.1`. Không bao giờ ghi thẳng vào `tasks` trước khi User xác nhận. |
+| **`draft_tasks`** (`DraftTask`) | `id` (UUID), `workspace_id`, `project_id`, `conversation_id` (`String?` — nullable), `input_mode` (`TEXT \| VOICE \| OMNICHANNEL_MSG \| SECURITY_FINDING`), `raw_input_text`, `task_title`, `description` (giữ nguyên PII gốc trên Server), `assignee_candidates` (`JSONB`), `suggested_deadline` (`TIMESTAMPTZ`), `extracted_subtasks` (`JSONB`), `ai_status` (`DRAFT_READY \| FALLBACK_MANUAL \| CONFIRMED \| DISCARDED`), `prompt_version` (`String?`), `model_id` (`String?`), `ai_original_snapshot` (`JSONB?`), `created_by`, `created_at`. | Lưu bản nháp bóc tách từ `FR-AGT-001`, `FR-AGT-003.3`, `FR-AGT-007.1`. Không bao giờ ghi thẳng vào `tasks` trước khi User xác nhận; `ai_original_snapshot` phục vụ tính HITL Edit-Diff Telemetry (`0` PII). |
 | **`proactive_alert_logs`** (`ProactiveAlertLog`) | `id`, `workspace_id`, `project_id?`, `task_id?`, `conversation_id?`, `alert_type` (`RISK_48H_DM \| DAILY_STANDUP \| CRITICAL_PATH_BLOCK \| WIP_BOTTLENECK \| CONVERSATION_SLA_48H`), `recipient_id`, `delivery_status` (`SENT \| SKIPPED_UNBOUND \| FAILED`), `sent_at`. | Nhật ký gửi cảnh báo tự động (`FR-AGT-002`). |
 | **`ticket_triage_logs`** (`TicketTriageLog`) | `id`, `workspace_id`, `conversation_id`, `predicted_intent` (`FAQ \| FEATURE_REQUEST \| BUG_INCIDENT \| GENERAL_CHAT`), `predicted_severity` (`P1_CRITICAL .. P4_LOW`), `sentiment_score` (`Float?`), `routed_cskh_user_id?`, `routing_reason` (`STICKY_PORTFOLIO_OWNER \| BACKUP_ON_LEAVE \| NEW_CONTACT_LEAST_ACTIVE \| MANUAL_CLAIM`), `auto_created_ticket_id?`, `escalation_task_id?`, `created_at`. | Nhật ký phân loại tin nhắn, định tuyến CSKH chuyên trách và leo thang Dev (`FR-AGT-003`). |
-| **`agent_action_drafts`** (`AgentActionDraft`) | `id`, `workspace_id`, `user_id`, `action_type` (`CREATE_TASK \| UPDATE_TASK \| BULK_RESCHEDULE \| CREATE_WBS_TREE`), `target_project_id`, `payload_json` (`JSONB` validated by Zod), `occ_versions` (`JSONB`), `status` (`PENDING_CONFIRM \| EXECUTED \| EXPIRED \| CANCELLED`), `expires_at` (`NOW() + 15m`). | Hàng đợi xác nhận HITL cho các thao tác ghi của PM Bot (`FR-AGT-004`). |
+| **`agent_action_drafts`** (`AgentActionDraft`) | `id`, `workspace_id`, `user_id`, `action_type` (`CREATE_TASK \| UPDATE_TASK \| BULK_RESCHEDULE \| CREATE_WBS_TREE`), `target_project_id`, `payload_json` (`JSONB` validated by Zod), `occ_versions` (`JSONB`), `prompt_version` (`String?`), `model_id` (`String?`), `ai_original_snapshot` (`JSONB?`), `status` (`PENDING_CONFIRM \| EXECUTED \| EXPIRED \| CANCELLED`), `expires_at` (`NOW() + 15m`). | Hàng đợi xác nhận HITL cho các thao tác ghi của PM Bot (`FR-AGT-004`). |
 | **`setup_blueprint_drafts`** (`SetupBlueprintDraft`) | `id`, `workspace_id`, `blueprint_type` (`PROJECT_SETUP \| MEMBER_PROVISIONING \| SECURITY_REMEDIATION`), `proposed_config` (`JSONB`), `validation_report` (`JSONB`), `status` (`DRAFT_PREVIEW \| APPLIED \| FAILED \| DISCARDED`), `created_by`, `applied_at?`. | Lưu bản xem trước cấu hình Project/Onboarding nguyên khối trước khi chạy Transaction (`FR-AGT-005`). |
 | **`dispatch_recommendations`** (`DispatchRecommendation`) | `id`, `workspace_id`, `task_id?`, `required_skills` (`JSONB`), `candidates_snapshot` (`JSONB`), `dispatch_mode` (`RECOMMEND_HITL \| AUTO_DISPATCH_P1`), `selected_user_id?`, `created_at`. | Lưu lịch sử chấm điểm gợi ý Dev (`40/35/25`) và quyết định gán việc (`FR-AGT-006`). |
-| **`approved_auto_reply_templates`** (`ApprovedAutoReplyTemplate`) | `id`, `workspace_id`, `intent` (`String`), `language` (`String`), `template_content` (`Text`), `status` (`DRAFT \| APPROVED \| ARCHIVED`), `approved_by_user_id?`, `approved_at?`, `created_at`. | Kho câu trả lời mẫu ngoài giờ đã được duyệt nội bộ (`FR-AGT-003.1`). Core chỉ gửi nguyên văn nội dung template này, cấm LLM sinh văn bản tự do. |
-| **`agent_knowledge_chunks`** (`AgentKnowledgeChunk`) | `id`, `workspace_id`, `project_id?`, `asset_id` (FK `project_assets`), `chunk_index`, `content`, `content_tsv` (`tsvector`), `embedding` (`vector(1024)`), `classification` (`INTERNAL \| CONFIDENTIAL \| RESTRICTED_SECURITY`), `faq_eligible` (`Boolean`), `created_at`. | Kho vector RAG nhúng trong PostgreSQL Core; đánh chỉ mục HNSW cosine (`m=16, ef_construction=64`), GIN trên `content_tsv`. Xóa cùng transaction khi đổi độ mật. |
+| **`approved_auto_reply_templates`** (`ApprovedAutoReplyTemplate`) | `id`, `workspace_id`, `channel_id?`, `title` (`String`), `intent_tag` (`String`), `language` (`String`), `template_body` (`Text`), `status` (`DRAFT \| APPROVED \| ARCHIVED`), `approved_by_id?`, `approved_at?`, `created_at`, `updated_at`. | Kho câu trả lời mẫu ngoài giờ đã được duyệt nội bộ (`FR-AGT-003.1`). Core chỉ gửi nguyên văn nội dung template này, cấm LLM sinh văn bản tự do. |
+| **`agent_knowledge_chunks`** (`AgentKnowledgeChunk`) | `id`, `workspace_id`, `project_id?`, `source_asset_id` (FK `project_assets` `ON DELETE CASCADE`), `chunk_index`, `content`, `content_tsv` (`tsvector`), `embedding` (`vector(1024)`), `embedding_model` (`VarChar`), `content_hash` (`VarChar(64)`), `classification` (`INTERNAL \| CONFIDENTIAL \| RESTRICTED_SECURITY`), `faq_eligible` (`Boolean`), `created_at`. | Kho vector RAG nhúng trong PostgreSQL Core; đánh chỉ mục HNSW cosine (`m=16, ef_construction=64`), GIN trên `content_tsv`. Xóa cùng transaction khi đổi độ mật. |
 
-* **Cờ cấu hình cấp Workspace (`workspaces` table):**
-  - `allow_confidential_llm_processing`: Boolean (mặc định `false`). Khóa cứng không gửi dữ liệu `CONFIDENTIAL` ra LLM nếu chưa bật.
-  - `after_hours_auto_reply_enabled`: Boolean (mặc định `false`). Bật/tắt chế độ phản hồi tự động ngoài giờ bằng template đã duyệt.
-  - `business_hours_json`: JSONB (định nghĩa khung giờ hành chính theo ngày trong tuần, ví dụ `08:00 - 17:30`, múi giờ `Asia/Ho_Chi_Minh`).
+* **Cờ cấu hình & Tùy chọn cấp Workspace / Thành viên (`workspaces` & `workspace_members`):**
+  - `workspaces.allow_confidential_llm_processing`: Boolean (mặc định `false`). Khóa cứng không gửi dữ liệu `CONFIDENTIAL` ra LLM nếu chưa bật.
+  - `workspaces.after_hours_auto_reply_enabled`: Boolean (mặc định `false`). Bật/tắt chế độ phản hồi tự động ngoài giờ bằng template đã duyệt.
+  - `workspaces.business_hours_json`: JSONB (định nghĩa khung giờ hành chính theo ngày trong tuần, ví dụ `08:00 - 17:30`, múi giờ `Asia/Ho_Chi_Minh`).
+  - `workspaces.agent_preferences`: JSONB? (`WorkspaceAgentPreferences` — allowlisted keys: `default_methodology`, `sprint_duration_days`, `wbs_estimation_unit`, ...).
+  - `workspace_members.agent_preferences`: JSONB? (`UserAgentPreferences` — allowlisted keys: `preferred_language`, `response_verbosity`, `preferred_format`, `default_active_project_id`, ...).
 
 ### 3.2. Redis Keys & PostgreSQL `opagent_runtime` (State & Caching)
 
@@ -129,8 +135,11 @@ flowchart TB
 | `alert:{task_id}` | `12h` | Chống gửi trùng Telegram DM cảnh báo Task sắp trễ hạn `< 48h` (`FR-AGT-002.1`). |
 | `sla_alert:{conversation_id}` | `6h` | Chống gửi trùng cảnh báo SLA hội thoại / Zalo OA sắp hết cửa sổ 48h (`FR-AGT-002.5`). |
 | `standup:{project_id}:{YYYY-MM-DD}` | `24h` | Đảm bảo mỗi Project chỉ gửi tối đa 1 báo cáo Standup/ngày lúc `18:00` (`FR-AGT-002.2`). |
-| `opa:budget:{workspace_id}:{YYYY-MM-DD}` | `48h` | Kiểm soát trần ngân sách token LLM hàng ngày của từng Workspace. |
+| `opa:budget:{workspace_id}:{YYYY-MM-DD}` | `48h` | Kiểm soát ngân sách token LLM hàng ngày 3 vùng (Green / Yellow 80% hạ cấp / Red 100%). |
 | `opa:revoked_jti:{jti}` | Theo `exp` token | Danh sách đen thu hồi tức thời Agent Delegation Token (`SEC-AGT-09`). |
+| `opa:pref:{wid}:{uid}` | `24h` | Cache `EffectivePrefs` (hợp nhất Workspace & User `agent_preferences` JSONB $\le 1\text{ KB}$). |
+| `opa:payload:{wid}:{thr}:{ref_id}` | `15m` | Lưu tạm raw payload tool lớn (`> 2 KB`) cho dữ liệu `INTERNAL` (RAM-only nếu `> INTERNAL`). |
+| `opa:lock:thread:{thr}` | `25s` | Khóa đồng thời theo `thread_id` gắn fencing token `run_id` chống ghi đè checkpoint. |
 | **`opagent_runtime.checkpoints`** *(PostgreSQL)* | `24h` | Bảng lưu checkpoint hội thoại của LangGraph StateGraphs; dọn dẹp định kỳ sau 24h, xóa lập tức nếu phiên xử lý tài liệu `> INTERNAL`. |
 
 ---
@@ -146,21 +155,23 @@ Mọi Tool đều yêu cầu xác thực qua Header `Authorization: Bearer <ADT>
 | 3 | `get_project_health_snapshot` | `READ` | Tính toán tất định Health Score (0-100), WIP violations, Blocker đường găng (`FR-AGT-002`). |
 | 4 | `resolve_cskh_portfolio_routing` | `READ` | Tra cứu danh bạ `channel_contact_owners` + lịch nghỉ phép để chia khách cho CSKH (`FR-AGT-003`). |
 | 5 | `search_faq_knowledge` | `READ` | Tìm kiếm vector RAG trên `pgvector` khóa cứng `classification = 'INTERNAL'` & `faq_eligible = true`. |
-| 6 | `get_approved_auto_reply_templates` | `READ` | Đọc danh sách câu trả lời mẫu `APPROVED` phục vụ phản hồi ngoài giờ tất định (`FR-AGT-003.1`). |
-| 7 | `query_tasks_by_nl_filters` | `READ` | Dịch filter an toàn sang SQL tham số hóa, giới hạn 10 kết quả/lượt trong phạm vi RBAC (`FR-AGT-004`). |
-| 8 | `get_sprint_evm_assessment` | `READ` | Tính toán SQL tất định chỉ số SPI, Burndown Gap, Velocity (loại trừ `TICKET`) (`FR-AGT-004`). |
-| 9 | `get_dispatch_candidates_snapshot` | `READ` | Tính điểm ứng viên Dev `40/35/25` (Capacity, Skills, 90d Ownership) trong 1 lần gọi (`FR-AGT-006`). |
-| 10 | `get_asset_findings_for_remediation` | `READ` | Lọc Finding lỗi `FAIL/CRITICAL` có kiểm tra độ mật `INTERNAL/CONFIDENTIAL/RESTRICTED` (`FR-AGT-007`). |
-| 11 | `check_release_handover_readiness` | `READ` | Kiểm tra điều kiện bàn giao: Quorum reviews, Strict DoD, và Finding blocker chưa đóng (`FR-AGT-007`). |
-| 12 | `build_handover_manifest_preview` | `READ` | Soạn `00_HANDOVER_MANIFEST.md` và thực thi RBAC Redaction khi xuất cho `EXTERNAL_CLIENT`. |
-| 13 | `audit_workspace_governance_posture` | `READ` | Kiểm toán cấu hình bảo mật Workspace (SSO, Auto-Lock, Quorum, NĐ 13) — **Khóa cứng ADMIN only**. |
-| 14 | `create_ticket_draft_from_messages` | `STAGE` | Tạo bản nháp Ticket `SUPPORT` (`FR-SUP-000`, `output_contract_type = NONE`) vào `draft_tasks`. |
-| 15 | `prepare_delivery_escalation` | `STAGE` | Tạo bản nháp Task `DELIVERY` leo thang từ Ticket (`parent_fr_id != FR-SUP-000`, `BR-001`). |
-| 16 | `stage_task_mutation` | `STAGE` | Kiểm tra Anti-Gaming (`FR-PRJ-007.4`), lưu nháp thay đổi vào `agent_action_drafts` (TTL 15m, OCC). |
-| 17 | `transition_task_status_checked` | `STAGE` | Kiểm tra cổng Strict DoD (`FR-PRJ-008`), WIP limit trước khi stage chuyển trạng thái `DONE`. |
-| 18 | `generate_project_setup_blueprint` | `STAGE` | Soạn bản nháp cấu hình dự án (`setup_blueprint_drafts`) cho Admin/PM xem Dry-Run. |
-| 19 | `stage_bulk_member_provisioning` | `STAGE` | Kiểm tra Subscription Seat Quota, tạo nháp mời thành viên hàng loạt — **Khóa cứng ADMIN only**. |
-| 20 | `stage_remediation_draft_tasks` | `STAGE` | Gom Finding lỗi thành bản nháp `draft_tasks` vá lỗi giữ liên kết `asset_remediation_links`. |
+| 6 | `query_tasks_by_nl_filters` | `READ` | Dịch filter an toàn sang SQL tham số hóa, giới hạn 10 kết quả/lượt trong phạm vi RBAC (`FR-AGT-004`). |
+| 7 | `get_sprint_evm_assessment` | `READ` | Tính toán SQL tất định chỉ số SPI, Burndown Gap, Velocity (loại trừ `TICKET`) (`FR-AGT-004`). |
+| 8 | `get_dispatch_candidates_snapshot` | `READ` | Tính điểm ứng viên Dev `40/35/25` (Capacity, Skills, 90d Ownership) trong 1 lần gọi (`FR-AGT-006`). |
+| 9 | `get_asset_findings_for_remediation` | `READ` | Lọc Finding lỗi `FAIL/CRITICAL` có kiểm tra độ mật `INTERNAL/CONFIDENTIAL/RESTRICTED` (`FR-AGT-007`). |
+| 10 | `check_release_handover_readiness` | `READ` | Kiểm tra điều kiện bàn giao: Quorum reviews, Strict DoD, và Finding blocker chưa đóng (`FR-AGT-007`). |
+| 11 | `build_handover_manifest_preview` | `READ` | Soạn `00_HANDOVER_MANIFEST.md` và thực thi RBAC Redaction khi xuất cho `EXTERNAL_CLIENT`. |
+| 12 | `audit_workspace_governance_posture` | `READ` | Kiểm toán cấu hình bảo mật Workspace (SSO, Auto-Lock, Quorum, NĐ 13) — **Khóa cứng ADMIN only**. |
+| 13 | `create_ticket_draft_from_messages` | `STAGE` | Tạo bản nháp Ticket `SUPPORT` (`FR-SUP-000`, `output_contract_type = NONE`) vào `draft_tasks`. |
+| 14 | `prepare_delivery_escalation` | `STAGE` | Tạo bản nháp Task `DELIVERY` leo thang từ Ticket (`parent_fr_id != FR-SUP-000`, `BR-001`). |
+| 15 | `stage_task_mutation` | `STAGE` | Kiểm tra Anti-Gaming (`FR-PRJ-007.4`), lưu nháp thay đổi vào `agent_action_drafts` (TTL 15m, OCC). |
+| 16 | `transition_task_status_checked` | `STAGE` | Kiểm tra cổng Strict DoD (`FR-PRJ-008`), WIP limit trước khi stage chuyển trạng thái `DONE`. |
+| 17 | `generate_project_setup_blueprint` | `STAGE` | Soạn bản nháp cấu hình dự án (`setup_blueprint_drafts`) cho Admin/PM xem Dry-Run. |
+| 18 | `stage_bulk_member_provisioning` | `STAGE` | Kiểm tra Subscription Seat Quota, tạo nháp mời thành viên hàng loạt — **Khóa cứng ADMIN only**. |
+| 19 | `stage_remediation_draft_tasks` | `STAGE` | Gom Finding lỗi thành bản nháp `draft_tasks` vá lỗi giữ liên kết `asset_remediation_links`. |
+| 20 | `post_internal_handover_note_draft` | `STAGE` | Ghi nháp tóm tắt bàn giao ca `INTERNAL_NOTE` trên hội thoại Omnichannel (`FR-AGT-003.6`). |
+
+*(Ghi chú: Đối với luồng After-Hours Auto-Reply, Core truy vấn trực tiếp `approved_auto_reply_templates` (`APPROVED`) và truyền danh sách template rút gọn vào input của chain `inbound-triage`, không cần expose thêm tool đọc template cho LLM).*
 
 ---
 
